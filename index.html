@@ -195,6 +195,16 @@ button, .tab, .board-btn { touch-action: manipulation; }
   text-align: center; color: var(--text2);
   font-size: 0.8rem; padding: 16px; margin-top: 4px;
 }
+.more-btn {
+  display: block; width: 100%;
+  padding: 14px; margin-top: 4px;
+  background: var(--bg2); border: 1px dashed #2a4060;
+  border-radius: var(--radius); color: var(--text2);
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; touch-action: manipulation;
+  transition: background .15s, color .15s;
+}
+.more-btn:active { background: #1e3050; color: #fff; }
 
 /* タブコンテンツ */
 .tab-pane { display: none; }
@@ -266,7 +276,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 // ───────────────────────────────────
 // State
 // ───────────────────────────────────
-const APP_VER = '1.1.0';
+const APP_VER = '1.2.0';
 
 // PWA インストール
 let _deferredPrompt = null;
@@ -287,6 +297,8 @@ function installPWA() {
 let TT   = null;       // timetable.json
 let board = 'shichiken'; // 七軒茶屋 or 緑井
 let activeTab = 'iki';
+let showCountIki   = 5;
+let showCountKaeri = 5;
 
 // ───────────────────────────────────
 // Debug time override
@@ -364,8 +376,6 @@ function renderIki() {
   const el = document.getElementById('list-iki');
   const now = nowMinutes();
   const isWd = isWeekday();
-  const SHOW = 7;
-
   // 上り列車（boarding stationに停車するもの）
   const upTrains = TT.up
     .filter(t => {
@@ -418,14 +428,20 @@ function renderIki() {
   const all = [...upTrains, ...nearTrains].sort((a,b) => a.depMin - b.depMin);
 
   // 過去を除外（少し前のは残す: -3分まで）
-  const shown = all.filter(t => t.depMin >= now - 3).slice(0, SHOW);
+  const candidates = all.filter(t => t.depMin >= now - 3);
 
-  if (shown.length === 0) {
+  if (candidates.length === 0) {
     el.innerHTML = '<div class="no-trains">本日の上り列車は終了しました</div>';
     return;
   }
 
-  el.innerHTML = shown.map(t => trainCard(t, now)).join('');
+  const shown = candidates.slice(0, showCountIki);
+  const remaining = candidates.length - shown.length;
+  const moreBtn = remaining > 0
+    ? `<button class="more-btn" onclick="showMoreIki()">次の${Math.min(remaining, 5)}本を表示 ▼</button>`
+    : `<div class="end-msg">本日の残り全${candidates.length}本を表示中</div>`;
+
+  el.innerHTML = shown.map(t => trainCard(t, now)).join('') + moreBtn;
 }
 
 function renderKaeri() {
@@ -433,7 +449,6 @@ function renderKaeri() {
   const el = document.getElementById('list-kaeri');
   const now = nowMinutes();
   const isWd = isWeekday();
-  const SHOW = 8;
 
   const trains = TT.down
     .filter(t => {
@@ -453,14 +468,20 @@ function renderKaeri() {
     }))
     .sort((a,b) => a.depMin - b.depMin);
 
-  const shown = trains.filter(t => t.depMin >= now - 3).slice(0, SHOW);
+  const candidates = trains.filter(t => t.depMin >= now - 3);
 
-  if (shown.length === 0) {
+  if (candidates.length === 0) {
     el.innerHTML = '<div class="no-trains">本日の下り列車は終了しました</div>';
     return;
   }
 
-  el.innerHTML = shown.map(t => kaeriCard(t, now)).join('');
+  const shown = candidates.slice(0, showCountKaeri);
+  const remaining = candidates.length - shown.length;
+  const moreBtn = remaining > 0
+    ? `<button class="more-btn" onclick="showMoreKaeri()">次の${Math.min(remaining, 5)}本を表示 ▼</button>`
+    : `<div class="end-msg">本日の残り全${candidates.length}本を表示中</div>`;
+
+  el.innerHTML = shown.map(t => kaeriCard(t, now)).join('') + moreBtn;
 }
 
 function trainCard(t, now) {
@@ -480,7 +501,7 @@ function trainCard(t, now) {
   // バッジ
   const badges = [];
   if (t.type === 'nearest') {
-    badges.push('<span class="badge nearest">🟠 梅林行き 最寄り</span>');
+    badges.push('<span class="badge nearest">梅林折返</span>');
   }
   if (t.origin && t.origin !== 'あき亀山') {
     badges.push(`<span class="badge origin">${t.origin}始発</span>`);
@@ -560,8 +581,18 @@ function updateClock() {
 // ───────────────────────────────────
 // UI
 // ───────────────────────────────────
+function showMoreIki() {
+  showCountIki += 5;
+  renderIki();
+}
+function showMoreKaeri() {
+  showCountKaeri += 5;
+  renderKaeri();
+}
+
 function switchTab(tab) {
   activeTab = tab;
+  showCountIki = 5; showCountKaeri = 5;
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
   document.getElementById(`tab-${tab}`).classList.add('active');
@@ -571,6 +602,7 @@ function switchTab(tab) {
 
 function setBoard(b) {
   board = b;
+  showCountIki = 5;
   document.querySelectorAll('.board-btn').forEach(el => el.classList.remove('active'));
   document.getElementById(`btn-${b}`).classList.add('active');
   renderIki();
