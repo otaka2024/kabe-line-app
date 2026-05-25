@@ -47,6 +47,15 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
 }
 #offline-msg { display: none; font-size: 0.75rem; color: var(--amber); margin-top: 2px; }
 #offline-msg.show { display: block; }
+#install-btn {
+  display: none;
+  position: absolute; top: 10px; right: 16px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 6px;
+  padding: 5px 12px; font-size: 0.75rem; font-weight: 700;
+  cursor: pointer;
+}
+#install-btn.show { display: block; }
 
 /* ── Debug panel ── */
 #debug-bar {
@@ -183,6 +192,7 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
     <span id="ver-badge"></span>
   </div>
   <div id="offline-msg">⚠ オフライン</div>
+  <button id="install-btn" onclick="installPWA()">📲 インストール</button>
   <div id="debug-badge" onclick="toggleDebug()" title="デバッグモード切替" style="display:none">🛠 DEBUG</div>
 </div>
 
@@ -228,6 +238,23 @@ html, body { height: 100%; font-family: -apple-system, 'Hiragino Sans', sans-ser
 // State
 // ───────────────────────────────────
 const APP_VER = '1.0.0';
+
+// PWA インストール
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  document.getElementById('install-btn').classList.add('show');
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-btn').classList.remove('show');
+  _deferredPrompt = null;
+});
+function installPWA() {
+  if (!_deferredPrompt) return;
+  _deferredPrompt.prompt();
+  _deferredPrompt.userChoice.then(() => { _deferredPrompt = null; });
+}
 let TT   = null;       // timetable.json
 let board = 'shichiken'; // 七軒茶屋 or 緑井
 let activeTab = 'iki';
