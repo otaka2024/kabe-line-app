@@ -278,7 +278,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 // ───────────────────────────────────
 // State
 // ───────────────────────────────────
-const APP_VER = '1.3.0';
+const APP_VER = '1.3.1';
 
 // PWA インストール
 let _deferredPrompt = null;
@@ -456,7 +456,7 @@ function renderKaeri() {
     .filter(t => {
       if (!t.hiroshima) return false;
       if (!isWd && t.weekday_only) return false;
-      if (!t.ryokui) return false; // 緑井を通らない（梅林行き等）は除外
+      if (t.terminal !== '緑井') return false; // 緑井行きのみ表示
       return true;
     })
     .map(t => ({
@@ -534,12 +534,10 @@ function kaeriCard(t, now) {
   const cdText = isPast ? '出発済' : (countdown(t.depMin, now) ?? '出発済');
   const cdClass = isPast ? '' : 'countdown';
 
-  // 到着時刻と行き先バッジ（緑井を通る電車のみ表示）
+  // 到着時刻（緑井行きのみ表示）
   const arrLabel = '緑井着';
   const arrTime = t.ryokui;
-  const badge = t.terminal === 'あき亀山'
-    ? '<span class="badge akikame">あき亀山行</span>'
-    : '<span class="badge ryokui">緑井行き</span>';
+  const badge = '<span class="badge ryokui">緑井行き</span>';
 
   return `
 <div class="${cls}">
