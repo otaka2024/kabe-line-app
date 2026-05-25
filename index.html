@@ -31,7 +31,6 @@
 html { height: 100%; }
 body {
   height: 100%; height: 100dvh;
-  display: flex; flex-direction: column;
   font-family: 'Noto Sans JP', 'Hiragino Sans', -apple-system, sans-serif;
   background: var(--bg); color: var(--text);
   overscroll-behavior: none;
@@ -123,7 +122,6 @@ button, .tab, .board-btn { touch-action: manipulation; }
 
 /* ── Train list ── */
 #content {
-  flex: 1; min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
@@ -278,7 +276,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 // ───────────────────────────────────
 // State
 // ───────────────────────────────────
-const APP_VER = '1.3.1';
+const APP_VER = '1.2.0';
 
 // PWA インストール
 let _deferredPrompt = null;
@@ -456,7 +454,6 @@ function renderKaeri() {
     .filter(t => {
       if (!t.hiroshima) return false;
       if (!isWd && t.weekday_only) return false;
-      if (t.terminal !== '緑井') return false; // 緑井行きのみ表示
       return true;
     })
     .map(t => ({
@@ -534,10 +531,19 @@ function kaeriCard(t, now) {
   const cdText = isPast ? '出発済' : (countdown(t.depMin, now) ?? '出発済');
   const cdClass = isPast ? '' : 'countdown';
 
-  // 到着時刻（緑井行きのみ表示）
-  const arrLabel = '緑井着';
-  const arrTime = t.ryokui;
-  const badge = '<span class="badge ryokui">緑井行き</span>';
+  // 到着時刻と行き先バッジ
+  let arrLabel, arrTime, badge;
+  if (t.terminal === 'あき亀山') {
+    arrLabel = '七軒茶屋着'; arrTime = t.shichiken;
+    badge = '<span class="badge akikame">あき亀山行</span>';
+  } else if (t.terminal === '梅林') {
+    arrLabel = '七軒茶屋着'; arrTime = t.shichiken;
+    badge = '<span class="badge bairin">梅林行き</span>';
+  } else {
+    // 緑井行き
+    arrLabel = '緑井着'; arrTime = t.ryokui;
+    badge = '<span class="badge ryokui">緑井行き</span>';
+  }
 
   return `
 <div class="${cls}">
