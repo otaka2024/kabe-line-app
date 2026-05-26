@@ -172,7 +172,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 .train-list {
   padding: 10px 12px;
   padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; gap: 8px;
+  display: flex; flex-direction: column; gap: 10px;
 }
 
 /* ── Train card ── */
@@ -181,7 +181,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
   border-radius: var(--radius);
   border: 1px solid #1e3050;
   padding: 0 14px 0 18px;
-  height: 72px;
+  height: 90px;
   display: flex; align-items: center; gap: 8px;
   position: relative; overflow: hidden;
   flex-shrink: 0;
@@ -233,14 +233,14 @@ button, .tab, .board-btn { touch-action: manipulation; }
   flex-shrink: 0;
 }
 .t-dep, .t-arr {
-  font-size: 24px; font-weight: 800; line-height: 1;
+  font-size: 30px; font-weight: 800; line-height: 1;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
-.t-arrow { font-size: 15px; color: var(--text2); }
+.t-arrow { font-size: 18px; color: var(--text2); }
 .t-cd {
-  font-size: 22px; font-weight: 700; line-height: 1;
+  font-size: 26px; font-weight: 700; line-height: 1;
   flex: 1; text-align: center;
   white-space: nowrap;
 }
@@ -287,9 +287,9 @@ button, .tab, .board-btn { touch-action: manipulation; }
 /* ── Mobile ── */
 @media (max-width: 400px) {
   #clock { font-size: 2.2rem; }
-  .t-dep, .t-arr { font-size: 20px; }
-  .t-cd { font-size: 18px; }
-  .train-card { height: 66px; padding: 0 10px 0 16px; }
+  .t-dep, .t-arr { font-size: 26px; }
+  .t-cd { font-size: 22px; }
+  .train-card { height: 82px; padding: 0 10px 0 16px; }
   .tab { padding: 11px 0; font-size: 0.95rem; }
   .badge { font-size: 0.63rem; padding: 2px 6px; }
   .t-badge { min-width: 64px; }
@@ -354,7 +354,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.1';
+const APP_VER = '2.0.2';
 
 // ── PWA ──
 let _deferredPrompt = null;
