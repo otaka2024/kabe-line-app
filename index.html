@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="可部線">
-<meta name="theme-color" content="#003f88">
+<meta name="theme-color" content="#0a3d7a">
 <title>可部線 時刻</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,55 +17,74 @@
   --bg: #0d1b2e;
   --bg2: #162035;
   --bg3: #1e2d45;
-  --blue: #1a6fc4;
-  --blue2: #2480d4;
   --text: #e8f0fc;
   --text2: #9baec8;
-  --green: #2ea84b;
-  --orange: #e07000;
-  --amber: #d4980a;
-  --red: #d04040;
+  --red: #c0392b;
   --radius: 12px;
+  --theme: #0a3d7a;
+  --theme-line: #4da6ff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { height: 100%; }
+html, body { height: 100%; }
 body {
-  height: 100%; height: 100dvh;
+  height: 100dvh;
+  display: flex; flex-direction: column;
   font-family: 'Noto Sans JP', 'Hiragino Sans', -apple-system, sans-serif;
   background: var(--bg); color: var(--text);
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
+  overflow: hidden;
 }
 button, .tab, .board-btn { touch-action: manipulation; }
 
 /* ── Header ── */
 #header {
-  background: var(--bg2);
-  border-bottom: 1px solid #1e3050;
+  background: var(--theme);
   padding: 10px 16px 8px;
-  position: sticky; top: 0; z-index: 100;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.25s;
 }
 #clock {
   font-size: 2.6rem; font-weight: 700; letter-spacing: 0.04em;
   line-height: 1; color: #fff;
 }
-#date-line { font-size: 0.85rem; color: var(--text2); margin-top: 2px; }
-#ver-badge {
-  font-size: 0.62rem; color: #4a6a8a;
-  margin-left: 8px; vertical-align: middle;
-  font-family: monospace;
-}
-#offline-msg { display: none; font-size: 0.75rem; color: var(--amber); margin-top: 2px; }
+#date-line { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
+#ver-badge { font-size: 0.62rem; color: rgba(255,255,255,0.4); margin-left: 8px; font-family: monospace; vertical-align: middle; }
+#offline-msg { display: none; font-size: 0.75rem; color: #ffdd99; margin-top: 2px; }
 #offline-msg.show { display: block; }
 #install-btn {
   display: none;
-  position: absolute; top: 10px; right: 16px;
-  background: var(--blue); color: #fff;
-  border: none; border-radius: 6px;
+  position: absolute; top: 10px; right: 48px;
+  background: rgba(255,255,255,0.18); color: #fff;
+  border: 1px solid rgba(255,255,255,0.35); border-radius: 6px;
   padding: 5px 12px; font-size: 0.75rem; font-weight: 700;
   cursor: pointer;
 }
 #install-btn.show { display: block; }
+#gear-btn {
+  position: absolute; top: 10px; right: 14px;
+  background: none; border: none;
+  font-size: 1.35rem; color: rgba(255,255,255,0.55);
+  cursor: pointer; padding: 2px; line-height: 1;
+}
+#gear-btn:hover { color: #fff; }
+#refresh-btn {
+  position: absolute; top: 10px; right: 50px;
+  background: none; border: none;
+  font-size: 1.2rem; color: rgba(255,255,255,0.55);
+  cursor: pointer; padding: 2px; line-height: 1;
+  transition: transform 0.4s ease, color 0.2s;
+}
+#refresh-btn:hover { color: #fff; }
+#refresh-btn.spinning { animation: spin 0.5s linear; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+#debug-badge {
+  position: absolute; top: 8px; right: 56px;
+  font-size: 0.62rem; color: #f08040; font-weight: 700;
+  cursor: pointer; padding: 2px 6px; border: 1px solid #804020; border-radius: 4px;
+  background: #1a0800;
+}
 
 /* ── Debug panel ── */
 #debug-bar {
@@ -75,6 +94,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
   background: #1a0a00;
   border-bottom: 1px solid #a04000;
   font-size: 0.78rem;
+  flex-shrink: 0;
 }
 #debug-bar.show { display: flex; }
 #debug-bar label { color: #f08040; font-weight: 600; }
@@ -86,139 +106,193 @@ button, .tab, .board-btn { touch-action: manipulation; }
   background: #803010; color: #ffcc88; border: none;
   border-radius: 5px; padding: 3px 10px; font-size: 0.78rem; cursor: pointer;
 }
-#debug-bar button:hover { background: #a04010; }
-#debug-badge {
-  position: absolute; top: 8px; right: 16px;
-  font-size: 0.65rem; color: #f08040; font-weight: 700; letter-spacing: 0.05em;
-  cursor: pointer; padding: 2px 6px; border: 1px solid #804020; border-radius: 4px;
-  background: #1a0800;
+
+/* ── Delay banner ── */
+#delay-banner {
+  display: none;
+  background: #c0392b; color: #fff;
+  font-size: 0.85rem; font-weight: 700;
+  padding: 8px 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: center;
+  letter-spacing: 0.03em;
 }
+#delay-banner.show { display: block; }
 
 /* ── Tabs ── */
-#tabs { display: flex; background: var(--bg2); border-bottom: 1px solid #1e3050; }
-.tab {
-  flex: 1; padding: 14px 0; text-align: center;
-  font-size: 1.1rem; font-weight: 600; cursor: pointer;
-  color: var(--text2); border-bottom: 3px solid transparent;
-  transition: color .2s, border-color .2s;
+#tabs {
+  display: flex;
+  background: var(--theme);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  flex-shrink: 0;
+  transition: background 0.25s;
 }
-.tab.active { color: #fff; border-bottom-color: var(--blue2); }
+.tab {
+  flex: 1; padding: 13px 0; text-align: center;
+  font-size: 1.05rem; font-weight: 600; cursor: pointer;
+  color: rgba(255,255,255,0.55); border-bottom: 3px solid transparent;
+  transition: color .2s, border-color .3s;
+}
+.tab.active { color: #fff; border-bottom-color: var(--theme-line); }
 
 /* ── Board selector ── */
 #board-selector {
-  display: flex; gap: 10px; padding: 12px 16px;
+  display: flex; gap: 10px; padding: 10px 12px;
   background: var(--bg);
+  flex-shrink: 0;
 }
 .board-btn {
-  flex: 1; padding: 12px 8px; text-align: center;
+  flex: 1; padding: 10px 8px; text-align: center;
   border-radius: var(--radius); border: 2px solid #2a3f5f;
-  font-size: 1.05rem; font-weight: 600; cursor: pointer;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
   color: var(--text2); background: var(--bg2);
   transition: all .2s;
 }
-.board-btn.active {
-  border-color: var(--blue2); color: #fff; background: #143060;
-}
+.board-btn.active { border-color: var(--theme); color: #fff; background: var(--theme); }
 
-/* ── Train list ── */
+/* ── Content / scroll structure ── */
 #content {
+  flex: 1; min-height: 0;
+  overflow: hidden;
+}
+.tab-pane {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+.tab-pane.active { display: flex; }
+
+.list-scroll {
+  flex: 1; min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
 }
 .train-list {
-  padding: 12px 14px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; gap: 10px;
+  padding: 10px 12px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 8px;
 }
 
+/* ── Train card ── */
 .train-card {
   background: var(--bg2);
   border-radius: var(--radius);
   border: 1px solid #1e3050;
-  padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
+  padding: 0 14px 0 18px;
+  height: 72px;
+  display: flex; align-items: center; gap: 8px;
   position: relative; overflow: hidden;
+  flex-shrink: 0;
 }
-.train-card.nearest {
-  border-color: var(--orange);
-  background: #1e1600;
-}
-.train-card.past { opacity: 0.35; }
-.train-card.imminent { border-color: var(--red); animation: pulse 1.2s infinite; }
-@keyframes pulse { 0%,100%{border-color:var(--red)} 50%{border-color:#a03030} }
-
-/* 左ライン */
+/* left line */
 .train-card::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-  background: var(--blue2); border-radius: var(--radius) 0 0 var(--radius);
+  background: transparent;
+  border-radius: var(--radius) 0 0 var(--radius);
 }
-.train-card.nearest::before { background: var(--orange); }
-.train-card.past::before { background: #2a3f5f; }
+/* past */
+.train-card.past { opacity: 0.3; }
+/* imminent */
+.train-card.imminent { animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100%{border-color:#c0392b} 50%{border-color:#882020} }
 
-/* 時刻 */
-.dep-time {
-  font-size: 2.5rem; font-weight: 800; line-height: 1;
-  color: #fff; min-width: 70px; text-align: center;
+/* ── Card type variants ── */
+/* 行き: 梅林折り返し */
+.train-card.c-nearest { background: #edf4ff; border-color: #90bef5; }
+.train-card.c-nearest::before { background: #0a3d7a; }
+.train-card.c-nearest .t-dep,
+.train-card.c-nearest .t-arr { color: #0d2244; }
+.train-card.c-nearest .t-arrow { color: #4a7ab0; }
+
+/* 行き: 梅林始発 */
+.train-card.c-bairin { background: #fff8f0; border-color: #ffcc80; }
+.train-card.c-bairin::before { background: #e67e22; }
+.train-card.c-bairin .t-dep,
+.train-card.c-bairin .t-arr { color: #3a200a; }
+.train-card.c-bairin .t-arrow { color: #a05820; }
+
+/* 行き: 緑井始発 */
+.train-card.c-ryokui { background: #f0faf0; border-color: #a5d6a7; }
+.train-card.c-ryokui::before { background: #2e7d32; }
+.train-card.c-ryokui .t-dep,
+.train-card.c-ryokui .t-arr { color: #1a2e1a; }
+.train-card.c-ryokui .t-arrow { color: #4a8a4a; }
+
+/* 帰り: 緑井行き */
+.train-card.c-kaeri-ryokui { background: #e8f5e9; border-color: #a5d6a7; }
+.train-card.c-kaeri-ryokui::before { background: #2e7d32; }
+.train-card.c-kaeri-ryokui .t-dep,
+.train-card.c-kaeri-ryokui .t-arr { color: #1a2e1a; }
+.train-card.c-kaeri-ryokui .t-arrow { color: #4a8a4a; }
+
+/* ── Time layout ── */
+.t-times {
+  display: flex; align-items: baseline; gap: 5px;
+  flex-shrink: 0;
 }
-.train-card.past .dep-time { color: var(--text2); }
-
-/* 真ん中エリア */
-.train-mid { flex: 1; min-width: 0; }
-.countdown {
-  font-size: 1.85rem; font-weight: 700; color: var(--blue2);
-  line-height: 1; margin-bottom: 4px;
+.t-dep, .t-arr {
+  font-size: 24px; font-weight: 800; line-height: 1;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
-.train-card.imminent .countdown { color: var(--red); }
-.train-card.past .countdown { color: var(--text2); }
-.arr-line { font-size: 0.9rem; color: var(--text2); }
-.arr-time { font-size: 1.6rem; font-weight: 700; color: var(--text); }
+.t-arrow { font-size: 15px; color: var(--text2); }
+.t-cd {
+  font-size: 22px; font-weight: 700; line-height: 1;
+  flex: 1; text-align: center;
+  white-space: nowrap;
+}
+.t-cd.cd-past { font-size: 13px; color: var(--text2) !important; font-weight: 400; }
+.t-cd.cd-red  { color: #c0392b !important; }
+.t-badge { min-width: 74px; text-align: right; flex-shrink: 0; }
 
-/* 右バッジ */
-.badges { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+/* ── Badges ── */
 .badge {
-  font-size: 0.85rem; font-weight: 800; padding: 4px 12px;
-  border-radius: 20px; white-space: nowrap; letter-spacing: 0.03em;
+  display: inline-block;
+  font-size: 0.7rem; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; white-space: nowrap;
 }
-.badge.akikame { background: #1e7a30; color: #fff; }
-.badge.bairin  { background: #c05800; color: #fff; }
-.badge.ryokui  { background: #2255c0; color: #fff; }
-.badge.nearest { background: #3a1a00; color: #e07000; }
-.badge.origin  { background: #0e5a6e; color: #fff; }
+.bg-nearest  { background: #cfe2ff; color: #0c447c; }
+.bg-bairin   { background: #faeeda; color: #854f0b; }
+.bg-ryokui   { background: #2e7d32; color: #fff; }
+.bg-k-ryokui { background: #2e7d32; color: #fff; }
 
-/* no-trains */
+/* ── Current anchor ── */
+#iki-anchor, #kaeri-anchor { height: 0; flex-shrink: 0; }
+
+/* ── No-trains msg ── */
 .no-trains {
   text-align: center; color: var(--text2);
-  font-size: 1rem; padding: 40px 20px;
+  font-size: 0.95rem; padding: 40px 16px;
 }
-.end-msg {
-  text-align: center; color: var(--text2);
-  font-size: 0.8rem; padding: 16px; margin-top: 4px;
-}
-.more-btn {
-  display: block; width: 100%;
-  padding: 14px; margin-top: 4px;
-  background: var(--bg2); border: 1px dashed #2a4060;
-  border-radius: var(--radius); color: var(--text2);
-  font-size: 0.9rem; font-weight: 600;
-  cursor: pointer; touch-action: manipulation;
-  transition: background .15s, color .15s;
-}
-.more-btn:active { background: #1e3050; color: #fff; }
 
-/* タブコンテンツ */
-.tab-pane { display: none; }
-.tab-pane.active { display: block; }
+/* ── Floating "現在に戻る" ── */
+#back-to-now {
+  display: none;
+  position: fixed;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  right: 16px;
+  background: var(--theme); color: #fff;
+  border: none; border-radius: 24px;
+  padding: 10px 18px; font-size: 0.88rem; font-weight: 700;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+  cursor: pointer;
+  z-index: 200;
+  transition: background 0.25s;
+}
+#back-to-now.show { display: block; }
 
-/* Pixel 6a / スマホ最適化 */
-@media (max-width: 480px) {
+/* ── Mobile ── */
+@media (max-width: 400px) {
   #clock { font-size: 2.2rem; }
-  .dep-time { font-size: 2.1rem; min-width: 62px; }
-  .countdown { font-size: 1.5rem; }
-  .arr-time { font-size: 1.3rem; }
-  .train-card { padding: 12px 12px; gap: 10px; }
-  .badge { font-size: 0.78rem; padding: 4px 9px; }
-  .tab { padding: 13px 0; font-size: 1rem; }
+  .t-dep, .t-arr { font-size: 20px; }
+  .t-cd { font-size: 18px; }
+  .train-card { height: 66px; padding: 0 10px 0 16px; }
+  .tab { padding: 11px 0; font-size: 0.95rem; }
+  .badge { font-size: 0.63rem; padding: 2px 6px; }
+  .t-badge { min-width: 64px; }
 }
 </style>
 </head>
@@ -226,13 +300,15 @@ button, .tab, .board-btn { touch-action: manipulation; }
 
 <div id="header" style="position:relative">
   <div id="clock" onclick="onClockClick()" style="cursor:pointer">--:--:--</div>
-  <div style="display:flex;align-items:baseline;gap:8px">
+  <div style="display:flex;align-items:baseline;gap:6px">
     <div id="date-line">読み込み中…</div>
     <span id="ver-badge"></span>
   </div>
   <div id="offline-msg">⚠ オフライン</div>
   <button id="install-btn" onclick="installPWA()">📲 インストール</button>
-  <div id="debug-badge" onclick="toggleDebug()" title="デバッグモード切替" style="display:none">🛠 DEBUG</div>
+  <div id="debug-badge" onclick="toggleDebug()" style="display:none">🛠</div>
+  <button id="refresh-btn" title="更新" onclick="manualRefresh()">↻</button>
+  <button id="gear-btn" title="設定">⚙</button>
 </div>
 
 <div id="debug-bar">
@@ -251,38 +327,39 @@ button, .tab, .board-btn { touch-action: manipulation; }
   <button onclick="resetDebugTime()">リセット</button>
 </div>
 
+<div id="delay-banner" onclick="openTrafficInfo()">⚠️ 可部線 運行情報あり</div>
+
 <div id="tabs">
   <div class="tab active" onclick="switchTab('iki')" id="tab-iki">行き</div>
   <div class="tab"        onclick="switchTab('kaeri')" id="tab-kaeri">帰り</div>
 </div>
 
 <div id="content">
-  <!-- 行きタブ -->
   <div class="tab-pane active" id="pane-iki">
     <div id="board-selector">
       <div class="board-btn active" onclick="setBoard('shichiken')" id="btn-shichiken">七軒茶屋</div>
-      <div class="board-btn"       onclick="setBoard('ryokui')"    id="btn-ryokui">緑井</div>
+      <div class="board-btn"        onclick="setBoard('ryokui')"    id="btn-ryokui">緑井</div>
     </div>
-    <div class="train-list" id="list-iki"></div>
+    <div class="list-scroll" id="scroll-iki">
+      <div class="train-list" id="list-iki"></div>
+    </div>
   </div>
-
-  <!-- 帰りタブ -->
   <div class="tab-pane" id="pane-kaeri">
-    <div class="train-list" id="list-kaeri"></div>
+    <div class="list-scroll" id="scroll-kaeri">
+      <div class="train-list" id="list-kaeri"></div>
+    </div>
   </div>
 </div>
 
-<script>
-// ───────────────────────────────────
-// State
-// ───────────────────────────────────
-const APP_VER = '1.2.0';
+<button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
-// PWA インストール
+<script>
+const APP_VER = '2.0.1';
+
+// ── PWA ──
 let _deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  _deferredPrompt = e;
+  e.preventDefault(); _deferredPrompt = e;
   document.getElementById('install-btn').classList.add('show');
 });
 window.addEventListener('appinstalled', () => {
@@ -294,156 +371,157 @@ function installPWA() {
   _deferredPrompt.prompt();
   _deferredPrompt.userChoice.then(() => { _deferredPrompt = null; });
 }
-let TT   = null;       // timetable.json
-let board = 'shichiken'; // 七軒茶屋 or 緑井
+
+let TT = null;
+let board = 'shichiken';
 let activeTab = 'iki';
-let showCountIki   = 5;
-let showCountKaeri = 5;
 
-// ───────────────────────────────────
-// Debug time override
-// ───────────────────────────────────
-let debugMinutes = null;  // null = 実時刻, 数値 = 上書き分
-let debugDay = null;      // null = 実曜日, 0-6 = 上書き曜日
-
+// ── Debug ──
+let debugMinutes = null, debugDay = null;
 let _clockClicks = 0, _clockTimer = null;
+
 function onClockClick() {
   _clockClicks++;
   clearTimeout(_clockTimer);
   _clockTimer = setTimeout(() => { _clockClicks = 0; }, 600);
   if (_clockClicks >= 3) { _clockClicks = 0; toggleDebug(); }
 }
-
 function toggleDebug() {
-  const bar = document.getElementById('debug-bar');
-  bar.classList.toggle('show');
+  document.getElementById('debug-bar').classList.toggle('show');
 }
-
 function applyDebugTime() {
-  const timeVal = document.getElementById('dbg-time').value; // "HH:MM"
-  const dayVal  = parseInt(document.getElementById('dbg-day').value, 10);
-  if (!timeVal) return;
-  const [h, m] = timeVal.split(':').map(Number);
-  debugMinutes = h * 60 + m;
-  debugDay = dayVal;
+  const t = document.getElementById('dbg-time').value;
+  const d = parseInt(document.getElementById('dbg-day').value, 10);
+  if (!t) return;
+  const [h, m] = t.split(':').map(Number);
+  debugMinutes = h * 60 + m; debugDay = d;
   document.getElementById('debug-badge').style.display = 'block';
-  render();
-  updateClock();
+  render(); updateClock();
 }
-
 function resetDebugTime() {
-  debugMinutes = null;
-  debugDay = null;
+  debugMinutes = null; debugDay = null;
   document.getElementById('debug-badge').style.display = 'none';
-  render();
-  updateClock();
+  render(); updateClock();
 }
 
-// ───────────────────────────────────
-// Time helpers
-// ───────────────────────────────────
+// ── Time helpers ──
 function nowMinutes() {
   if (debugMinutes !== null) return debugMinutes;
-  const n = new Date();
-  return n.getHours() * 60 + n.getMinutes();
+  const n = new Date(); return n.getHours() * 60 + n.getMinutes();
 }
 function hhmm2min(s) {
   if (!s) return null;
-  const [h, m] = s.split(':').map(Number);
-  return h * 60 + m;
-}
-function minToHHMM(min) {
-  const h = Math.floor(min / 60) % 24;
-  const m = min % 60;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-}
-function countdown(depMin, nowMin) {
-  const diff = depMin - nowMin;
-  if (diff < 0) return null;   // 出発済み
-  if (diff === 0) return '今すぐ';
-  return `あと${diff}分`;
+  const [h, m] = s.split(':').map(Number); return h * 60 + m;
 }
 function isWeekday() {
   const d = debugDay !== null ? debugDay : new Date().getDay();
   return d >= 1 && d <= 5;
 }
 
-// ───────────────────────────────────
-// Rendering
-// ───────────────────────────────────
+// ── Countdown HTML ──
+function cdHtml(diff, normalColor) {
+  if (diff < -3) return `<span class="t-cd cd-past">出発済</span>`;
+  if (diff <= 0)  return `<span class="t-cd cd-red">まもなく発車</span>`;
+  if (diff <= 10) return `<span class="t-cd cd-red">あと${diff}分</span>`;
+  return `<span class="t-cd" style="color:${normalColor}">あと${diff}分</span>`;
+}
+
+// ── 行き card ──
+function trainCard(t, now) {
+  const diff = t.depMin - now;
+  const isPast = diff < -3;
+  const isImminent = !isPast && diff <= 0;
+
+  let cardCls = '', badge = '', normalColor = '#4da6ff';
+  if (t.type === 'nearest') {
+    cardCls = 'c-nearest'; normalColor = '#2a5faa';
+    badge = '<span class="badge bg-nearest">梅林折り返し</span>';
+  } else if (t.origin === '梅林') {
+    cardCls = 'c-bairin'; normalColor = '#a05010';
+    badge = '<span class="badge bg-bairin">梅林始発</span>';
+  } else if (t.origin === '緑井' && board === 'ryokui') {
+    cardCls = 'c-ryokui'; normalColor = '#2e7d32';
+    badge = '<span class="badge bg-ryokui">緑井始発</span>';
+  }
+
+  const cls = ['train-card', cardCls, isPast ? 'past' : '', isImminent ? 'imminent' : '']
+    .filter(Boolean).join(' ');
+
+  return `<div class="${cls}">
+  <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${t.arr || '—'}</span></div>
+  ${cdHtml(diff, normalColor)}
+  <div class="t-badge">${badge}</div>
+</div>`;
+}
+
+// ── 帰り card ──
+function kaeriCard(t, now) {
+  const diff = t.depMin - now;
+  const isPast = diff < -3;
+  const isImminent = !isPast && diff <= 0;
+
+  let cardCls = '', badge = '', arrTime = '', normalColor = '#1b5e20';
+  if (t.terminal === '緑井') {
+    cardCls = 'c-kaeri-ryokui';
+    badge = '<span class="badge bg-k-ryokui">緑井行き</span>';
+    arrTime = t.ryokui;
+  } else {
+    arrTime = t.shichiken;
+  }
+
+  const cls = ['train-card', cardCls, isPast ? 'past' : '', isImminent ? 'imminent' : '']
+    .filter(Boolean).join(' ');
+
+  return `<div class="${cls}">
+  <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${arrTime || '—'}</span></div>
+  ${cdHtml(diff, normalColor)}
+  <div class="t-badge">${badge}</div>
+</div>`;
+}
+
+// ── Render 行き ──
 function renderIki() {
   if (!TT) return;
   const el = document.getElementById('list-iki');
   const now = nowMinutes();
   const isWd = isWeekday();
-  // 上り列車（boarding stationに停車するもの）
+
   const upTrains = TT.up
-    .filter(t => {
-      const depTime = t[board]; // ryokui or shichiken
-      if (!depTime) return false;
-      if (!isWd && t.weekday_only) return false;
-      return true;
-    })
+    .filter(t => t[board] && (isWd || !t.weekday_only))
     .map(t => ({
-      type: 'normal',
-      depKey: board,
-      dep: t[board],
-      depMin: hhmm2min(t[board]),
-      arr: t.hiroshima,
-      arrLabel: '広島着',
-      origin: t.origin,
-      no: t.no,
+      type: 'normal', dep: t[board], depMin: hhmm2min(t[board]),
+      arr: t.hiroshima, origin: t.origin, no: t.no,
     }));
 
-  // 梅林以降停車の上り列車リスト（乗り換え用）
   const upFromBairin = TT.up.filter(u => u.bairin && u.hiroshima && (!u.weekday_only || isWd));
 
-  // 下り 梅林行き（最寄りパターン）boarding stationから梅林→乗換→広島
   const nearTrains = TT.down
-    .filter(t => {
-      if (t.terminal !== '梅林') return false;
-      const depTime = t[board];
-      if (!depTime) return false;
-      if (!isWd && t.weekday_only) return false;
-      return true;
-    })
+    .filter(t => t.terminal === '梅林' && t[board] && (isWd || !t.weekday_only))
     .map(t => {
-      const bairinArrMin = hhmm2min(t.bairin);
-      // 梅林着後に乗れる最初の上り電車を探す
-      const connecting = upFromBairin
-        .filter(u => hhmm2min(u.bairin) >= bairinArrMin)
+      const bMin = hhmm2min(t.bairin);
+      const con = upFromBairin.filter(u => hhmm2min(u.bairin) >= bMin)
         .sort((a, b) => hhmm2min(a.bairin) - hhmm2min(b.bairin))[0];
-      return {
-        type: 'nearest',
-        dep: t[board],
-        depMin: hhmm2min(t[board]),
-        arr: connecting ? connecting.hiroshima : null,
-        arrLabel: '広島着',
-        origin: null,
-        no: t.no,
-      };
+      return { type: 'nearest', dep: t[board], depMin: hhmm2min(t[board]),
+               arr: con ? con.hiroshima : null, origin: null, no: t.no };
     });
 
-  // 合体してdep昇順
-  const all = [...upTrains, ...nearTrains].sort((a,b) => a.depMin - b.depMin);
-
-  // 過去を除外（少し前のは残す: -3分まで）
-  const candidates = all.filter(t => t.depMin >= now - 3);
-
-  if (candidates.length === 0) {
-    el.innerHTML = '<div class="no-trains">本日の上り列車は終了しました</div>';
-    return;
+  const all = [...upTrains, ...nearTrains].sort((a, b) => a.depMin - b.depMin);
+  if (all.length === 0) {
+    el.innerHTML = '<div class="no-trains">本日の上り列車は終了しました</div>'; return;
   }
 
-  const shown = candidates.slice(0, showCountIki);
-  const remaining = candidates.length - shown.length;
-  const moreBtn = remaining > 0
-    ? `<button class="more-btn" onclick="showMoreIki()">次の${Math.min(remaining, 5)}本を表示 ▼</button>`
-    : `<div class="end-msg">本日の残り全${candidates.length}本を表示中</div>`;
-
-  el.innerHTML = shown.map(t => trainCard(t, now)).join('') + moreBtn;
+  const anchorIdx = Math.max(0, all.findIndex(t => t.depMin >= now - 3));
+  let html = '';
+  all.forEach((t, i) => {
+    if (i === anchorIdx) html += '<div id="iki-anchor"></div>';
+    html += trainCard(t, now);
+  });
+  if (anchorIdx >= all.length) html += '<div id="iki-anchor"></div>';
+  el.innerHTML = html;
+  scrollToAnchor('iki');
 }
 
+// ── Render 帰り ──
 function renderKaeri() {
   if (!TT) return;
   const el = document.getElementById('list-kaeri');
@@ -451,114 +529,58 @@ function renderKaeri() {
   const isWd = isWeekday();
 
   const trains = TT.down
-    .filter(t => {
-      if (!t.hiroshima) return false;
-      if (!isWd && t.weekday_only) return false;
-      return true;
-    })
-    .map(t => ({
-      type: 'kaeri',
-      dep: t.hiroshima,
-      depMin: hhmm2min(t.hiroshima),
-      terminal: t.terminal,
-      shichiken: t.shichiken,
-      ryokui: t.ryokui,
-      bairin: t.bairin,
-      no: t.no,
-    }))
-    .sort((a,b) => a.depMin - b.depMin);
+    .filter(t => t.hiroshima && (isWd || !t.weekday_only))
+    .map(t => ({ dep: t.hiroshima, depMin: hhmm2min(t.hiroshima),
+                 terminal: t.terminal, shichiken: t.shichiken, ryokui: t.ryokui, no: t.no }))
+    .sort((a, b) => a.depMin - b.depMin);
 
-  const candidates = trains.filter(t => t.depMin >= now - 3);
-
-  if (candidates.length === 0) {
-    el.innerHTML = '<div class="no-trains">本日の下り列車は終了しました</div>';
-    return;
+  if (trains.length === 0) {
+    el.innerHTML = '<div class="no-trains">本日の下り列車は終了しました</div>'; return;
   }
 
-  const shown = candidates.slice(0, showCountKaeri);
-  const remaining = candidates.length - shown.length;
-  const moreBtn = remaining > 0
-    ? `<button class="more-btn" onclick="showMoreKaeri()">次の${Math.min(remaining, 5)}本を表示 ▼</button>`
-    : `<div class="end-msg">本日の残り全${candidates.length}本を表示中</div>`;
-
-  el.innerHTML = shown.map(t => kaeriCard(t, now)).join('') + moreBtn;
+  const anchorIdx = Math.max(0, trains.findIndex(t => t.depMin >= now - 3));
+  let html = '';
+  trains.forEach((t, i) => {
+    if (i === anchorIdx) html += '<div id="kaeri-anchor"></div>';
+    html += kaeriCard(t, now);
+  });
+  if (anchorIdx >= trains.length) html += '<div id="kaeri-anchor"></div>';
+  el.innerHTML = html;
+  scrollToAnchor('kaeri');
 }
 
-function trainCard(t, now) {
-  const diff = t.depMin - now;
-  const isPast = diff < -3;
-  const isImminent = diff >= 0 && diff <= 2;
-  const cls = [
-    'train-card',
-    t.type === 'nearest' ? 'nearest' : '',
-    isPast ? 'past' : '',
-    isImminent ? 'imminent' : '',
-  ].filter(Boolean).join(' ');
+// ── Scroll helpers ──
+function scrollToAnchor(which) {
+  const anchorId = (which || activeTab) === 'iki' ? 'iki-anchor' : 'kaeri-anchor';
+  const scrollId = (which || activeTab) === 'iki' ? 'scroll-iki' : 'scroll-kaeri';
+  requestAnimationFrame(() => {
+    const anchor = document.getElementById(anchorId);
+    const scroller = document.getElementById(scrollId);
+    if (!anchor || !scroller) return;
+    scroller.scrollTop = anchor.offsetTop;
+    observeAnchor();
+  });
+}
+function backToNow() { scrollToAnchor(); }
 
-  const cdText = isPast ? '出発済' : (countdown(t.depMin, now) ?? '出発済');
-  const cdClass = isPast ? '' : 'countdown';
-
-  // バッジ
-  const badges = [];
-  if (t.type === 'nearest') {
-    badges.push('<span class="badge nearest">梅林折返</span>');
-  }
-  if (t.origin && t.origin !== 'あき亀山') {
-    badges.push(`<span class="badge origin">${t.origin}始発</span>`);
-  }
-
-  return `
-<div class="${cls}">
-  <div class="dep-time">${t.dep}</div>
-  <div class="train-mid">
-    <div class="${cdClass}">${cdText}</div>
-    <div class="arr-line">${t.arrLabel} <span class="arr-time">${t.arr || '—'}</span></div>
-  </div>
-  <div class="badges">${badges.join('')}</div>
-</div>`;
+let _anchorObserver = null;
+function observeAnchor() {
+  if (_anchorObserver) _anchorObserver.disconnect();
+  const anchorId = activeTab === 'iki' ? 'iki-anchor' : 'kaeri-anchor';
+  const scrollId = activeTab === 'iki' ? 'scroll-iki' : 'scroll-kaeri';
+  const anchor = document.getElementById(anchorId);
+  const scroller = document.getElementById(scrollId);
+  if (!anchor || !scroller) return;
+  _anchorObserver = new IntersectionObserver(
+    entries => {
+      document.getElementById('back-to-now').classList.toggle('show', !entries[0].isIntersecting);
+    },
+    { root: scroller, threshold: 0, rootMargin: '80px 0px 80px 0px' }
+  );
+  _anchorObserver.observe(anchor);
 }
 
-function kaeriCard(t, now) {
-  const diff = t.depMin - now;
-  const isPast = diff < -3;
-  const isImminent = diff >= 0 && diff <= 2;
-  const cls = [
-    'train-card',
-    isPast ? 'past' : '',
-    isImminent ? 'imminent' : '',
-  ].filter(Boolean).join(' ');
-
-  const cdText = isPast ? '出発済' : (countdown(t.depMin, now) ?? '出発済');
-  const cdClass = isPast ? '' : 'countdown';
-
-  // 到着時刻と行き先バッジ
-  let arrLabel, arrTime, badge;
-  if (t.terminal === 'あき亀山') {
-    arrLabel = '七軒茶屋着'; arrTime = t.shichiken;
-    badge = '<span class="badge akikame">あき亀山行</span>';
-  } else if (t.terminal === '梅林') {
-    arrLabel = '七軒茶屋着'; arrTime = t.shichiken;
-    badge = '<span class="badge bairin">梅林行き</span>';
-  } else {
-    // 緑井行き
-    arrLabel = '緑井着'; arrTime = t.ryokui;
-    badge = '<span class="badge ryokui">緑井行き</span>';
-  }
-
-  return `
-<div class="${cls}">
-  <div class="dep-time">${t.dep}</div>
-  <div class="train-mid">
-    <div class="${cdClass}">${cdText}</div>
-    <div class="arr-line">${arrLabel} <span class="arr-time">${arrTime || '—'}</span></div>
-  </div>
-  <div class="badges">${badge}</div>
-</div>`;
-}
-
-// ───────────────────────────────────
-// Clock
-// ───────────────────────────────────
+// ── Clock ──
 const DAYS = ['日','月','火','水','木','金','土'];
 function updateClock() {
   const n = new Date();
@@ -574,63 +596,74 @@ function updateClock() {
   const day = debugDay !== null ? debugDay : n.getDay();
   document.getElementById('date-line').textContent =
     `${n.getMonth()+1}月${n.getDate()}日（${DAYS[day]}）${isWeekday()?'平日ダイヤ':'土休日ダイヤ（参考）'}`;
-  // 毎分0秒でリスト更新（デバッグ中は自動更新しない）
   if (debugMinutes === null && n.getSeconds() === 0) render();
 }
 
-// ───────────────────────────────────
-// UI
-// ───────────────────────────────────
-function showMoreIki() {
-  showCountIki += 5;
-  renderIki();
-}
-function showMoreKaeri() {
-  showCountKaeri += 5;
-  renderKaeri();
+// ── Theme ──
+function applyTheme(tab) {
+  const isIki = tab === 'iki';
+  document.documentElement.style.setProperty('--theme', isIki ? '#0a3d7a' : '#0a4a1a');
+  document.documentElement.style.setProperty('--theme-line', isIki ? '#4da6ff' : '#7de88a');
 }
 
+// ── Tab / board ──
 function switchTab(tab) {
   activeTab = tab;
-  showCountIki = 5; showCountKaeri = 5;
+  applyTheme(tab);
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
   document.getElementById(`tab-${tab}`).classList.add('active');
   document.getElementById(`pane-${tab}`).classList.add('active');
   render();
 }
-
 function setBoard(b) {
   board = b;
-  showCountIki = 5;
   document.querySelectorAll('.board-btn').forEach(el => el.classList.remove('active'));
   document.getElementById(`btn-${b}`).classList.add('active');
   renderIki();
 }
-
 function render() {
-  if (activeTab === 'iki') renderIki();
-  else renderKaeri();
+  if (activeTab === 'iki') renderIki(); else renderKaeri();
 }
 
-// ───────────────────────────────────
-// Boot
-// ───────────────────────────────────
+// ── Delay info ──
+async function fetchDelay() {
+  try {
+    const r = await fetch('https://trafficinfo.westjr.co.jp/chugoku.html');
+    const text = await r.text();
+    document.getElementById('delay-banner').classList.toggle('show', text.includes('可部線'));
+  } catch {
+    document.getElementById('delay-banner').classList.remove('show');
+  }
+}
+function openTrafficInfo() {
+  window.open('https://trafficinfo.westjr.co.jp/chugoku.html', '_blank');
+}
+
+function manualRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+  btn.addEventListener('animationend', () => btn.classList.remove('spinning'), { once: true });
+  render();
+  fetchDelay();
+  scrollToAnchor();
+}
+
+// ── Boot ──
 async function boot() {
   document.getElementById('ver-badge').textContent = 'v' + APP_VER;
+  applyTheme('iki');
   updateClock();
   setInterval(updateClock, 1000);
-
-  // 15秒ごとにリスト更新
   setInterval(render, 15000);
-
-  // オフライン検知
+  setInterval(fetchDelay, 5 * 60 * 1000);
   window.addEventListener('offline', () => document.getElementById('offline-msg').classList.add('show'));
   window.addEventListener('online',  () => document.getElementById('offline-msg').classList.remove('show'));
   if (!navigator.onLine) document.getElementById('offline-msg').classList.add('show');
 
   TT = {"generated":"2026-05-25","down":[{"no":"2731M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"05:40","ryokui":"06:02","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"733M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"05:55","ryokui":"06:20","shichiken":"06:21","bairin":"06:24","uwayagi":"06:27","akikame":"06:41"},{"no":"2735M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"06:04","ryokui":"06:28","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"737M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:14","ryokui":"06:37","shichiken":"06:39","bairin":"06:43","uwayagi":"06:46","akikame":"07:01"},{"no":"2739M","weekday_only":true,"through":false,"terminal":"梅林","hiroshima":"06:18","ryokui":"06:48","shichiken":"06:49","bairin":"06:51","uwayagi":null,"akikame":null},{"no":"741M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:35","ryokui":"07:00","shichiken":"07:02","bairin":"07:07","uwayagi":"07:10","akikame":"07:24"},{"no":"2743M","weekday_only":true,"through":false,"terminal":"梅林","hiroshima":"06:43","ryokui":"07:11","shichiken":"07:13","bairin":"07:15","uwayagi":null,"akikame":null},{"no":"745M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:54","ryokui":"07:24","shichiken":"07:25","bairin":"07:31","uwayagi":"07:34","akikame":"07:48"},{"no":"2747M","weekday_only":false,"through":false,"terminal":"梅林","hiroshima":"07:09","ryokui":"07:35","shichiken":"07:37","bairin":"07:39","uwayagi":null,"akikame":null},{"no":"749M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"07:18","ryokui":"07:48","shichiken":"07:50","bairin":"07:54","uwayagi":"07:58","akikame":"08:10"},{"no":"2751M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"07:31","ryokui":"07:57","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"753M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"07:41","ryokui":"08:10","shichiken":"08:12","bairin":"08:16","uwayagi":"08:20","akikame":"08:32"},{"no":"2755M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"07:55","ryokui":"08:21","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"757M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"08:02","ryokui":"08:31","shichiken":"08:33","bairin":"08:38","uwayagi":"08:41","akikame":"08:52"},{"no":"2759M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"08:10","ryokui":"08:40","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"761M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"08:17","ryokui":"08:52","shichiken":"08:53","bairin":"08:58","uwayagi":"09:01","akikame":"09:12"},{"no":"763M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"08:41","ryokui":"09:11","shichiken":"09:13","bairin":"09:17","uwayagi":"09:20","akikame":"09:32"},{"no":"765M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"09:03","ryokui":"09:31","shichiken":"09:32","bairin":"09:37","uwayagi":"09:40","akikame":"09:52"},{"no":"2767M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"09:26","ryokui":"09:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"769M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"09:48","ryokui":"10:11","shichiken":"10:12","bairin":"10:17","uwayagi":"10:20","akikame":"10:32"},{"no":"771M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"10:08","ryokui":"10:31","shichiken":"10:32","bairin":"10:37","uwayagi":"10:40","akikame":"10:52"},{"no":"2773M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"10:27","ryokui":"10:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"775M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"10:48","ryokui":"11:11","shichiken":"11:12","bairin":"11:17","uwayagi":"11:20","akikame":"11:32"},{"no":"777M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"11:08","ryokui":"11:31","shichiken":"11:32","bairin":"11:37","uwayagi":"11:40","akikame":"11:52"},{"no":"2779M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"11:27","ryokui":"11:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"781M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"11:48","ryokui":"12:11","shichiken":"12:12","bairin":"12:17","uwayagi":"12:20","akikame":"12:32"},{"no":"783M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"12:08","ryokui":"12:31","shichiken":"12:32","bairin":"12:37","uwayagi":"12:40","akikame":"12:52"},{"no":"2785M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"12:24","ryokui":"12:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"787M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"12:48","ryokui":"13:11","shichiken":"13:12","bairin":"13:17","uwayagi":"13:20","akikame":"13:32"},{"no":"789M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"13:08","ryokui":"13:31","shichiken":"13:32","bairin":"13:37","uwayagi":"13:40","akikame":"13:52"},{"no":"2791M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"13:27","ryokui":"13:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"793M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"13:48","ryokui":"14:11","shichiken":"14:12","bairin":"14:17","uwayagi":"14:20","akikame":"14:32"},{"no":"795M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"14:08","ryokui":"14:31","shichiken":"14:32","bairin":"14:37","uwayagi":"14:40","akikame":"14:52"},{"no":"2797M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"14:27","ryokui":"14:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"799M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"14:48","ryokui":"15:11","shichiken":"15:12","bairin":"15:17","uwayagi":"15:20","akikame":"15:32"},{"no":"801M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"15:06","ryokui":"15:31","shichiken":"15:32","bairin":"15:37","uwayagi":"15:40","akikame":"15:52"},{"no":"2803M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"15:27","ryokui":"15:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"805M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"15:48","ryokui":"16:11","shichiken":"16:12","bairin":"16:17","uwayagi":"16:20","akikame":"16:32"},{"no":"2807M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:03","ryokui":"16:25","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"809M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:12","ryokui":"16:37","shichiken":"16:39","bairin":"16:44","uwayagi":"16:47","akikame":"16:59"},{"no":"2811M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:25","ryokui":"16:49","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"813M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:34","ryokui":"17:02","shichiken":"17:04","bairin":"17:08","uwayagi":"17:12","akikame":"17:23"},{"no":"2815M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:49","ryokui":"17:12","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"817M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:57","ryokui":"17:25","shichiken":"17:27","bairin":"17:31","uwayagi":"17:35","akikame":"17:46"},{"no":"2819M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"17:12","ryokui":"17:37","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"821M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"17:26","ryokui":"17:51","shichiken":"17:53","bairin":"17:56","uwayagi":"17:59","akikame":"18:09"},{"no":"2823M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"17:35","ryokui":"18:02","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"825M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"17:49","ryokui":"18:15","shichiken":"18:17","bairin":"18:23","uwayagi":"18:26","akikame":"18:38"},{"no":"2827M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:03","ryokui":"18:26","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"829M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"18:12","ryokui":"18:40","shichiken":"18:41","bairin":"18:47","uwayagi":"18:50","akikame":"19:00"},{"no":"2831M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:25","ryokui":"18:49","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"833M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"18:35","ryokui":"19:03","shichiken":"19:05","bairin":"19:10","uwayagi":"19:14","akikame":"19:25"},{"no":"2835M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:49","ryokui":"19:13","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"837M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:03","ryokui":"19:26","shichiken":"19:28","bairin":"19:31","uwayagi":"19:35","akikame":"19:45"},{"no":"2839M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"19:11","ryokui":"19:35","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"841M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:26","ryokui":"19:50","shichiken":"19:52","bairin":"19:55","uwayagi":"19:59","akikame":"20:08"},{"no":"2843M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"19:35","ryokui":"20:01","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"845M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:51","ryokui":"20:14","shichiken":"20:16","bairin":"20:19","uwayagi":"20:23","akikame":"20:33"},{"no":"2847M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"20:05","ryokui":"20:27","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"849M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"20:13","ryokui":"20:38","shichiken":"20:39","bairin":"20:43","uwayagi":"20:46","akikame":"20:56"},{"no":"2851M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"20:26","ryokui":"20:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"853M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"20:47","ryokui":"21:11","shichiken":"21:13","bairin":"21:16","uwayagi":"21:20","akikame":"21:29"},{"no":"2855M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"21:03","ryokui":"21:23","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"857M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"21:12","ryokui":"21:39","shichiken":"21:41","bairin":"21:46","uwayagi":"21:49","akikame":"21:59"},{"no":"2859M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"21:27","ryokui":"21:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"861M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"21:48","ryokui":"22:09","shichiken":"22:11","bairin":"22:17","uwayagi":"22:20","akikame":"22:30"},{"no":"863M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"22:09","ryokui":"22:33","shichiken":"22:35","bairin":"22:37","uwayagi":"22:41","akikame":"22:51"},{"no":"865M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"22:37","ryokui":"23:01","shichiken":"23:03","bairin":"23:05","uwayagi":"23:09","akikame":"23:19"},{"no":"867M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"23:14","ryokui":"23:37","shichiken":"23:38","bairin":"23:41","uwayagi":"23:44","akikame":"23:54"},{"no":"869M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"23:41","ryokui":"00:02","shichiken":"00:04","bairin":"00:07","uwayagi":"00:10","akikame":"00:20"}],"up":[{"no":"730M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"05:09","uwayagi":"05:19","bairin":"05:22","shichiken":"05:24","ryokui":"05:26","hiroshima":"05:46"},{"no":"732M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"05:32","uwayagi":"05:41","bairin":"05:44","shichiken":"05:47","ryokui":"05:49","hiroshima":"06:14"},{"no":"2734M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"06:07","hiroshima":"06:39"},{"no":"736M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"06:03","uwayagi":"06:12","bairin":"06:15","shichiken":"06:17","ryokui":"06:20","hiroshima":"06:47"},{"no":"2738M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"06:38","hiroshima":"07:06"},{"no":"740M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"06:29","uwayagi":"06:40","bairin":"06:43","shichiken":"06:45","ryokui":"06:51","hiroshima":"07:15"},{"no":"2742M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"06:55","shichiken":"06:58","ryokui":"07:01","hiroshima":"07:27"},{"no":"744M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"06:52","uwayagi":"07:03","bairin":"07:06","shichiken":"07:09","ryokui":"07:14","hiroshima":"07:38"},{"no":"2746M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"07:19","shichiken":"07:22","ryokui":"07:24","hiroshima":"07:51"},{"no":"748M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"07:15","uwayagi":"07:26","bairin":"07:30","shichiken":"07:32","ryokui":"07:35","hiroshima":"07:59"},{"no":"2750M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"07:43","shichiken":"07:46","ryokui":"07:48","hiroshima":"08:14"},{"no":"752M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"07:39","uwayagi":"07:51","bairin":"07:55","shichiken":"07:58","ryokui":"08:00","hiroshima":"08:26"},{"no":"2754M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:12","hiroshima":"08:37"},{"no":"756M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:01","uwayagi":"08:13","bairin":"08:16","shichiken":"08:19","ryokui":"08:22","hiroshima":"08:50"},{"no":"2758M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:32","hiroshima":"08:58"},{"no":"760M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:23","uwayagi":"08:34","bairin":"08:37","shichiken":"08:40","ryokui":"08:42","hiroshima":"09:10"},{"no":"2762M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:53","hiroshima":"09:19"},{"no":"764M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:43","uwayagi":"08:54","bairin":"08:57","shichiken":"09:00","ryokui":"09:02","hiroshima":"09:33"},{"no":"766M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"09:03","uwayagi":"09:14","bairin":"09:17","shichiken":"09:19","ryokui":"09:21","hiroshima":"09:44"},{"no":"768M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"09:23","uwayagi":"09:34","bairin":"09:37","shichiken":"09:39","ryokui":"09:41","hiroshima":"10:04"},{"no":"2770M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"10:01","hiroshima":"10:24"},{"no":"772M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"10:03","uwayagi":"10:14","bairin":"10:17","shichiken":"10:19","ryokui":"10:21","hiroshima":"10:44"},{"no":"774M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"10:23","uwayagi":"10:34","bairin":"10:37","shichiken":"10:39","ryokui":"10:41","hiroshima":"11:04"},{"no":"2776M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"11:01","hiroshima":"11:24"},{"no":"778M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"11:03","uwayagi":"11:14","bairin":"11:17","shichiken":"11:19","ryokui":"11:21","hiroshima":"11:44"},{"no":"780M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"11:23","uwayagi":"11:34","bairin":"11:37","shichiken":"11:39","ryokui":"11:41","hiroshima":"12:04"},{"no":"2782M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"12:01","hiroshima":"12:24"},{"no":"784M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"12:03","uwayagi":"12:14","bairin":"12:17","shichiken":"12:19","ryokui":"12:21","hiroshima":"12:44"},{"no":"786M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"12:23","uwayagi":"12:34","bairin":"12:37","shichiken":"12:39","ryokui":"12:41","hiroshima":"13:04"},{"no":"2788M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"13:01","hiroshima":"13:24"},{"no":"790M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"13:03","uwayagi":"13:14","bairin":"13:17","shichiken":"13:19","ryokui":"13:21","hiroshima":"13:44"},{"no":"792M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"13:23","uwayagi":"13:34","bairin":"13:37","shichiken":"13:39","ryokui":"13:41","hiroshima":"14:04"},{"no":"2794M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"14:01","hiroshima":"14:24"},{"no":"796M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"14:03","uwayagi":"14:14","bairin":"14:17","shichiken":"14:19","ryokui":"14:21","hiroshima":"14:44"},{"no":"798M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"14:23","uwayagi":"14:34","bairin":"14:37","shichiken":"14:39","ryokui":"14:41","hiroshima":"15:12"},{"no":"2800M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"15:01","hiroshima":"15:24"},{"no":"802M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"15:03","uwayagi":"15:14","bairin":"15:17","shichiken":"15:19","ryokui":"15:21","hiroshima":"15:44"},{"no":"804M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"15:23","uwayagi":"15:34","bairin":"15:37","shichiken":"15:39","ryokui":"15:41","hiroshima":"16:07"},{"no":"2806M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"16:01","hiroshima":"16:25"},{"no":"808M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:03","uwayagi":"16:14","bairin":"16:17","shichiken":"16:19","ryokui":"16:26","hiroshima":"16:53"},{"no":"2810M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"16:40","hiroshima":"17:08"},{"no":"812M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:23","uwayagi":"16:40","bairin":"16:46","shichiken":"16:49","ryokui":"16:51","hiroshima":"17:21"},{"no":"2814M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:03","hiroshima":"17:32"},{"no":"816M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:50","uwayagi":"17:05","bairin":"17:10","shichiken":"17:13","ryokui":"17:15","hiroshima":"17:41"},{"no":"2818M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:28","hiroshima":"17:57"},{"no":"820M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"17:14","uwayagi":"17:28","bairin":"17:35","shichiken":"17:38","ryokui":"17:40","hiroshima":"18:09"},{"no":"2822M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:52","hiroshima":"18:22"},{"no":"824M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"17:37","uwayagi":"17:50","bairin":"17:57","shichiken":"18:00","ryokui":"18:03","hiroshima":"18:29"},{"no":"2826M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"18:17","hiroshima":"18:45"},{"no":"828M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:10","uwayagi":"18:19","bairin":"18:22","shichiken":"18:25","ryokui":"18:27","hiroshima":"18:58"},{"no":"2830M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"18:40","hiroshima":"19:07"},{"no":"832M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:29","uwayagi":"18:43","bairin":"18:46","shichiken":"18:49","ryokui":"18:51","hiroshima":"19:19"},{"no":"2834M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:04","hiroshima":"19:30"},{"no":"836M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:51","uwayagi":"19:07","bairin":"19:10","shichiken":"19:13","ryokui":"19:16","hiroshima":"19:43"},{"no":"2838M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:26","hiroshima":"19:53"},{"no":"840M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:15","uwayagi":"19:25","bairin":"19:32","shichiken":"19:35","ryokui":"19:37","hiroshima":"20:00"},{"no":"2842M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:50","hiroshima":"20:14"},{"no":"844M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:36","uwayagi":"19:49","bairin":"19:56","shichiken":"19:59","ryokui":"20:02","hiroshima":"20:32"},{"no":"2846M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"20:18","hiroshima":"20:44"},{"no":"848M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:59","uwayagi":"20:14","bairin":"20:21","shichiken":"20:23","ryokui":"20:28","hiroshima":"20:53"},{"no":"2850M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"20:40","hiroshima":"21:07"},{"no":"852M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"20:23","uwayagi":"20:37","bairin":"20:44","shichiken":"20:46","ryokui":"20:50","hiroshima":"21:19"},{"no":"2854M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"21:11","hiroshima":"21:37"},{"no":"856M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"21:00","uwayagi":"21:09","bairin":"21:19","shichiken":"21:21","ryokui":"21:24","hiroshima":"21:44"},{"no":"2858M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"21:41","hiroshima":"22:05"},{"no":"860M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"21:33","uwayagi":"21:42","bairin":"21:46","shichiken":"21:48","ryokui":"21:53","hiroshima":"22:17"},{"no":"2862M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"22:12","hiroshima":"22:32"},{"no":"864M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"22:04","uwayagi":"22:14","bairin":"22:19","shichiken":"22:21","ryokui":"22:23","hiroshima":"22:44"},{"no":"866M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"22:42","uwayagi":"22:52","bairin":"22:55","shichiken":"22:57","ryokui":"23:00","hiroshima":"23:20"},{"no":"868M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"23:10","uwayagi":"23:20","bairin":"23:23","shichiken":"23:25","ryokui":"23:27","hiroshima":"23:48"}]};
   render();
+  fetchDelay();
 }
 
 boot();
