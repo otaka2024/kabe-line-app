@@ -354,7 +354,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.2';
+const APP_VER = '2.0.3';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -557,7 +557,9 @@ function scrollToAnchor(which) {
     const anchor = document.getElementById(anchorId);
     const scroller = document.getElementById(scrollId);
     if (!anchor || !scroller) return;
-    scroller.scrollTop = anchor.offsetTop;
+    const anchorRect = anchor.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    scroller.scrollTop += anchorRect.top - scrollerRect.top;
     observeAnchor();
   });
 }
