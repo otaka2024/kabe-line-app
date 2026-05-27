@@ -259,8 +259,22 @@ button, .tab, .board-btn { touch-action: manipulation; }
 .bg-ryokui   { background: #2e7d32; color: #fff; }
 .bg-k-ryokui { background: #2e7d32; color: #fff; }
 
-/* ── Current anchor ── */
-#iki-anchor, #kaeri-anchor { height: 0; flex-shrink: 0; }
+/* ── Current time line ── */
+#iki-anchor, #kaeri-anchor {
+  height: 2px;
+  background: var(--theme-line);
+  flex-shrink: 0;
+  border-radius: 1px;
+  position: relative;
+  margin: 2px 0;
+}
+#iki-anchor::after, #kaeri-anchor::after {
+  content: '現在';
+  position: absolute;
+  left: 4px; top: -14px;
+  font-size: 10px; font-weight: 700;
+  color: var(--theme-line);
+}
 
 /* ── No-trains msg ── */
 .no-trains {
@@ -354,7 +368,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.3';
+const APP_VER = '2.0.4';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -409,6 +423,10 @@ function nowMinutes() {
   if (debugMinutes !== null) return debugMinutes;
   const n = new Date(); return n.getHours() * 60 + n.getMinutes();
 }
+function nowSeconds() {
+  if (debugMinutes !== null) return debugMinutes * 60;
+  const n = new Date(); return n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds();
+}
 function hhmm2min(s) {
   if (!s) return null;
   const [h, m] = s.split(':').map(Number); return h * 60 + m;
@@ -419,16 +437,44 @@ function isWeekday() {
 }
 
 // ── Countdown HTML ──
-function cdHtml(diff, normalColor) {
-  if (diff < -3) return `<span class="t-cd cd-past">出発済</span>`;
-  if (diff <= 0)  return `<span class="t-cd cd-red">まもなく発車</span>`;
-  if (diff <= 10) return `<span class="t-cd cd-red">あと${diff}分</span>`;
-  return `<span class="t-cd" style="color:${normalColor}">あと${diff}分</span>`;
+function cdHtml(depMin, normalColor) {
+  const diffSec = depMin * 60 - nowSeconds();
+  const attr = `data-dep="${depMin}" data-color="${normalColor}"`;
+  if (diffSec < -180) return `<span class="t-cd cd-past" ${attr}>出発済</span>`;
+  if (diffSec <= 0)   return `<span class="t-cd cd-red" ${attr}>まもなく発車</span>`;
+  const mins = Math.floor(diffSec / 60);
+  const secs = diffSec % 60;
+  const str = mins > 0 ? `${mins}分${String(secs).padStart(2,'0')}秒` : `${secs}秒`;
+  if (diffSec <= 600) return `<span class="t-cd cd-red" ${attr}>あと${str}</span>`;
+  return `<span class="t-cd" style="color:${normalColor}" ${attr}>あと${str}</span>`;
+}
+
+// ── Countdown tick (every second) ──
+function updateCountdowns() {
+  const ns = nowSeconds();
+  document.querySelectorAll('.t-cd[data-dep]').forEach(el => {
+    const depMin = parseInt(el.dataset.dep);
+    const normalColor = el.dataset.color || '#4da6ff';
+    const diffSec = depMin * 60 - ns;
+    let cls, style = '', text;
+    if (diffSec < -180) { cls = 't-cd cd-past'; text = '出発済'; }
+    else if (diffSec <= 0) { cls = 't-cd cd-red'; text = 'まもなく発車'; }
+    else {
+      const mins = Math.floor(diffSec / 60);
+      const secs = diffSec % 60;
+      const str = mins > 0 ? `${mins}分${String(secs).padStart(2,'0')}秒` : `${secs}秒`;
+      if (diffSec <= 600) { cls = 't-cd cd-red'; text = `あと${str}`; }
+      else { cls = 't-cd'; style = `color:${normalColor}`; text = `あと${str}`; }
+    }
+    if (el.textContent !== text || el.className !== cls) {
+      el.className = cls; el.style.cssText = style; el.textContent = text;
+    }
+  });
 }
 
 // ── 行き card ──
 function trainCard(t, now) {
-  const diff = t.depMin - now;
+  const diff = t.depMin - now;  // minutes, for past/imminent class only
   const isPast = diff < -3;
   const isImminent = !isPast && diff <= 0;
 
@@ -449,14 +495,14 @@ function trainCard(t, now) {
 
   return `<div class="${cls}">
   <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${t.arr || '—'}</span></div>
-  ${cdHtml(diff, normalColor)}
+  ${cdHtml(t.depMin, normalColor)}
   <div class="t-badge">${badge}</div>
 </div>`;
 }
 
 // ── 帰り card ──
 function kaeriCard(t, now) {
-  const diff = t.depMin - now;
+  const diff = t.depMin - now;  // minutes, for past/imminent class only
   const isPast = diff < -3;
   const isImminent = !isPast && diff <= 0;
 
@@ -474,13 +520,13 @@ function kaeriCard(t, now) {
 
   return `<div class="${cls}">
   <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${arrTime || '—'}</span></div>
-  ${cdHtml(diff, normalColor)}
+  ${cdHtml(t.depMin, normalColor)}
   <div class="t-badge">${badge}</div>
 </div>`;
 }
 
 // ── Render 行き ──
-function renderIki() {
+function renderIki(scroll = false) {
   if (!TT) return;
   const el = document.getElementById('list-iki');
   const now = nowMinutes();
@@ -518,11 +564,11 @@ function renderIki() {
   });
   if (anchorIdx >= all.length) html += '<div id="iki-anchor"></div>';
   el.innerHTML = html;
-  scrollToAnchor('iki');
+  if (scroll) scrollToAnchor('iki');
 }
 
 // ── Render 帰り ──
-function renderKaeri() {
+function renderKaeri(scroll = false) {
   if (!TT) return;
   const el = document.getElementById('list-kaeri');
   const now = nowMinutes();
@@ -546,7 +592,7 @@ function renderKaeri() {
   });
   if (anchorIdx >= trains.length) html += '<div id="kaeri-anchor"></div>';
   el.innerHTML = html;
-  scrollToAnchor('kaeri');
+  if (scroll) scrollToAnchor('kaeri');
 }
 
 // ── Scroll helpers ──
@@ -616,16 +662,16 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
   document.getElementById(`tab-${tab}`).classList.add('active');
   document.getElementById(`pane-${tab}`).classList.add('active');
-  render();
+  render(true);
 }
 function setBoard(b) {
   board = b;
   document.querySelectorAll('.board-btn').forEach(el => el.classList.remove('active'));
   document.getElementById(`btn-${b}`).classList.add('active');
-  renderIki();
+  renderIki(true);
 }
-function render() {
-  if (activeTab === 'iki') renderIki(); else renderKaeri();
+function render(scroll = false) {
+  if (activeTab === 'iki') renderIki(scroll); else renderKaeri(scroll);
 }
 
 // ── Delay info ──
@@ -646,25 +692,25 @@ function manualRefresh() {
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('spinning');
   btn.addEventListener('animationend', () => btn.classList.remove('spinning'), { once: true });
-  render();
+  render(true);
   fetchDelay();
-  scrollToAnchor();
 }
 
 // ── Boot ──
 async function boot() {
   document.getElementById('ver-badge').textContent = 'v' + APP_VER;
-  applyTheme('iki');
   updateClock();
   setInterval(updateClock, 1000);
-  setInterval(render, 15000);
+  setInterval(render, 60000);
+  setInterval(updateCountdowns, 1000);
   setInterval(fetchDelay, 5 * 60 * 1000);
   window.addEventListener('offline', () => document.getElementById('offline-msg').classList.add('show'));
   window.addEventListener('online',  () => document.getElementById('offline-msg').classList.remove('show'));
   if (!navigator.onLine) document.getElementById('offline-msg').classList.add('show');
 
   TT = {"generated":"2026-05-25","down":[{"no":"2731M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"05:40","ryokui":"06:02","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"733M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"05:55","ryokui":"06:20","shichiken":"06:21","bairin":"06:24","uwayagi":"06:27","akikame":"06:41"},{"no":"2735M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"06:04","ryokui":"06:28","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"737M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:14","ryokui":"06:37","shichiken":"06:39","bairin":"06:43","uwayagi":"06:46","akikame":"07:01"},{"no":"2739M","weekday_only":true,"through":false,"terminal":"梅林","hiroshima":"06:18","ryokui":"06:48","shichiken":"06:49","bairin":"06:51","uwayagi":null,"akikame":null},{"no":"741M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:35","ryokui":"07:00","shichiken":"07:02","bairin":"07:07","uwayagi":"07:10","akikame":"07:24"},{"no":"2743M","weekday_only":true,"through":false,"terminal":"梅林","hiroshima":"06:43","ryokui":"07:11","shichiken":"07:13","bairin":"07:15","uwayagi":null,"akikame":null},{"no":"745M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"06:54","ryokui":"07:24","shichiken":"07:25","bairin":"07:31","uwayagi":"07:34","akikame":"07:48"},{"no":"2747M","weekday_only":false,"through":false,"terminal":"梅林","hiroshima":"07:09","ryokui":"07:35","shichiken":"07:37","bairin":"07:39","uwayagi":null,"akikame":null},{"no":"749M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"07:18","ryokui":"07:48","shichiken":"07:50","bairin":"07:54","uwayagi":"07:58","akikame":"08:10"},{"no":"2751M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"07:31","ryokui":"07:57","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"753M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"07:41","ryokui":"08:10","shichiken":"08:12","bairin":"08:16","uwayagi":"08:20","akikame":"08:32"},{"no":"2755M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"07:55","ryokui":"08:21","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"757M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"08:02","ryokui":"08:31","shichiken":"08:33","bairin":"08:38","uwayagi":"08:41","akikame":"08:52"},{"no":"2759M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"08:10","ryokui":"08:40","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"761M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"08:17","ryokui":"08:52","shichiken":"08:53","bairin":"08:58","uwayagi":"09:01","akikame":"09:12"},{"no":"763M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"08:41","ryokui":"09:11","shichiken":"09:13","bairin":"09:17","uwayagi":"09:20","akikame":"09:32"},{"no":"765M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"09:03","ryokui":"09:31","shichiken":"09:32","bairin":"09:37","uwayagi":"09:40","akikame":"09:52"},{"no":"2767M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"09:26","ryokui":"09:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"769M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"09:48","ryokui":"10:11","shichiken":"10:12","bairin":"10:17","uwayagi":"10:20","akikame":"10:32"},{"no":"771M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"10:08","ryokui":"10:31","shichiken":"10:32","bairin":"10:37","uwayagi":"10:40","akikame":"10:52"},{"no":"2773M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"10:27","ryokui":"10:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"775M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"10:48","ryokui":"11:11","shichiken":"11:12","bairin":"11:17","uwayagi":"11:20","akikame":"11:32"},{"no":"777M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"11:08","ryokui":"11:31","shichiken":"11:32","bairin":"11:37","uwayagi":"11:40","akikame":"11:52"},{"no":"2779M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"11:27","ryokui":"11:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"781M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"11:48","ryokui":"12:11","shichiken":"12:12","bairin":"12:17","uwayagi":"12:20","akikame":"12:32"},{"no":"783M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"12:08","ryokui":"12:31","shichiken":"12:32","bairin":"12:37","uwayagi":"12:40","akikame":"12:52"},{"no":"2785M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"12:24","ryokui":"12:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"787M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"12:48","ryokui":"13:11","shichiken":"13:12","bairin":"13:17","uwayagi":"13:20","akikame":"13:32"},{"no":"789M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"13:08","ryokui":"13:31","shichiken":"13:32","bairin":"13:37","uwayagi":"13:40","akikame":"13:52"},{"no":"2791M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"13:27","ryokui":"13:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"793M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"13:48","ryokui":"14:11","shichiken":"14:12","bairin":"14:17","uwayagi":"14:20","akikame":"14:32"},{"no":"795M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"14:08","ryokui":"14:31","shichiken":"14:32","bairin":"14:37","uwayagi":"14:40","akikame":"14:52"},{"no":"2797M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"14:27","ryokui":"14:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"799M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"14:48","ryokui":"15:11","shichiken":"15:12","bairin":"15:17","uwayagi":"15:20","akikame":"15:32"},{"no":"801M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"15:06","ryokui":"15:31","shichiken":"15:32","bairin":"15:37","uwayagi":"15:40","akikame":"15:52"},{"no":"2803M","weekday_only":false,"through":false,"terminal":"緑井","hiroshima":"15:27","ryokui":"15:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"805M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"15:48","ryokui":"16:11","shichiken":"16:12","bairin":"16:17","uwayagi":"16:20","akikame":"16:32"},{"no":"2807M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:03","ryokui":"16:25","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"809M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:12","ryokui":"16:37","shichiken":"16:39","bairin":"16:44","uwayagi":"16:47","akikame":"16:59"},{"no":"2811M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:25","ryokui":"16:49","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"813M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:34","ryokui":"17:02","shichiken":"17:04","bairin":"17:08","uwayagi":"17:12","akikame":"17:23"},{"no":"2815M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"16:49","ryokui":"17:12","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"817M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"16:57","ryokui":"17:25","shichiken":"17:27","bairin":"17:31","uwayagi":"17:35","akikame":"17:46"},{"no":"2819M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"17:12","ryokui":"17:37","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"821M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"17:26","ryokui":"17:51","shichiken":"17:53","bairin":"17:56","uwayagi":"17:59","akikame":"18:09"},{"no":"2823M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"17:35","ryokui":"18:02","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"825M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"17:49","ryokui":"18:15","shichiken":"18:17","bairin":"18:23","uwayagi":"18:26","akikame":"18:38"},{"no":"2827M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:03","ryokui":"18:26","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"829M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"18:12","ryokui":"18:40","shichiken":"18:41","bairin":"18:47","uwayagi":"18:50","akikame":"19:00"},{"no":"2831M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:25","ryokui":"18:49","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"833M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"18:35","ryokui":"19:03","shichiken":"19:05","bairin":"19:10","uwayagi":"19:14","akikame":"19:25"},{"no":"2835M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"18:49","ryokui":"19:13","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"837M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:03","ryokui":"19:26","shichiken":"19:28","bairin":"19:31","uwayagi":"19:35","akikame":"19:45"},{"no":"2839M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"19:11","ryokui":"19:35","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"841M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:26","ryokui":"19:50","shichiken":"19:52","bairin":"19:55","uwayagi":"19:59","akikame":"20:08"},{"no":"2843M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"19:35","ryokui":"20:01","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"845M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"19:51","ryokui":"20:14","shichiken":"20:16","bairin":"20:19","uwayagi":"20:23","akikame":"20:33"},{"no":"2847M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"20:05","ryokui":"20:27","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"849M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"20:13","ryokui":"20:38","shichiken":"20:39","bairin":"20:43","uwayagi":"20:46","akikame":"20:56"},{"no":"2851M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"20:26","ryokui":"20:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"853M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"20:47","ryokui":"21:11","shichiken":"21:13","bairin":"21:16","uwayagi":"21:20","akikame":"21:29"},{"no":"2855M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"21:03","ryokui":"21:23","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"857M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"21:12","ryokui":"21:39","shichiken":"21:41","bairin":"21:46","uwayagi":"21:49","akikame":"21:59"},{"no":"2859M","weekday_only":true,"through":false,"terminal":"緑井","hiroshima":"21:27","ryokui":"21:50","shichiken":null,"bairin":null,"uwayagi":null,"akikame":null},{"no":"861M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"21:48","ryokui":"22:09","shichiken":"22:11","bairin":"22:17","uwayagi":"22:20","akikame":"22:30"},{"no":"863M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"22:09","ryokui":"22:33","shichiken":"22:35","bairin":"22:37","uwayagi":"22:41","akikame":"22:51"},{"no":"865M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"22:37","ryokui":"23:01","shichiken":"23:03","bairin":"23:05","uwayagi":"23:09","akikame":"23:19"},{"no":"867M","weekday_only":true,"through":false,"terminal":"あき亀山","hiroshima":"23:14","ryokui":"23:37","shichiken":"23:38","bairin":"23:41","uwayagi":"23:44","akikame":"23:54"},{"no":"869M","weekday_only":false,"through":false,"terminal":"あき亀山","hiroshima":"23:41","ryokui":"00:02","shichiken":"00:04","bairin":"00:07","uwayagi":"00:10","akikame":"00:20"}],"up":[{"no":"730M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"05:09","uwayagi":"05:19","bairin":"05:22","shichiken":"05:24","ryokui":"05:26","hiroshima":"05:46"},{"no":"732M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"05:32","uwayagi":"05:41","bairin":"05:44","shichiken":"05:47","ryokui":"05:49","hiroshima":"06:14"},{"no":"2734M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"06:07","hiroshima":"06:39"},{"no":"736M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"06:03","uwayagi":"06:12","bairin":"06:15","shichiken":"06:17","ryokui":"06:20","hiroshima":"06:47"},{"no":"2738M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"06:38","hiroshima":"07:06"},{"no":"740M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"06:29","uwayagi":"06:40","bairin":"06:43","shichiken":"06:45","ryokui":"06:51","hiroshima":"07:15"},{"no":"2742M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"06:55","shichiken":"06:58","ryokui":"07:01","hiroshima":"07:27"},{"no":"744M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"06:52","uwayagi":"07:03","bairin":"07:06","shichiken":"07:09","ryokui":"07:14","hiroshima":"07:38"},{"no":"2746M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"07:19","shichiken":"07:22","ryokui":"07:24","hiroshima":"07:51"},{"no":"748M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"07:15","uwayagi":"07:26","bairin":"07:30","shichiken":"07:32","ryokui":"07:35","hiroshima":"07:59"},{"no":"2750M","weekday_only":true,"through":false,"origin":"梅林","akikame":null,"uwayagi":null,"bairin":"07:43","shichiken":"07:46","ryokui":"07:48","hiroshima":"08:14"},{"no":"752M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"07:39","uwayagi":"07:51","bairin":"07:55","shichiken":"07:58","ryokui":"08:00","hiroshima":"08:26"},{"no":"2754M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:12","hiroshima":"08:37"},{"no":"756M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:01","uwayagi":"08:13","bairin":"08:16","shichiken":"08:19","ryokui":"08:22","hiroshima":"08:50"},{"no":"2758M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:32","hiroshima":"08:58"},{"no":"760M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:23","uwayagi":"08:34","bairin":"08:37","shichiken":"08:40","ryokui":"08:42","hiroshima":"09:10"},{"no":"2762M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"08:53","hiroshima":"09:19"},{"no":"764M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"08:43","uwayagi":"08:54","bairin":"08:57","shichiken":"09:00","ryokui":"09:02","hiroshima":"09:33"},{"no":"766M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"09:03","uwayagi":"09:14","bairin":"09:17","shichiken":"09:19","ryokui":"09:21","hiroshima":"09:44"},{"no":"768M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"09:23","uwayagi":"09:34","bairin":"09:37","shichiken":"09:39","ryokui":"09:41","hiroshima":"10:04"},{"no":"2770M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"10:01","hiroshima":"10:24"},{"no":"772M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"10:03","uwayagi":"10:14","bairin":"10:17","shichiken":"10:19","ryokui":"10:21","hiroshima":"10:44"},{"no":"774M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"10:23","uwayagi":"10:34","bairin":"10:37","shichiken":"10:39","ryokui":"10:41","hiroshima":"11:04"},{"no":"2776M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"11:01","hiroshima":"11:24"},{"no":"778M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"11:03","uwayagi":"11:14","bairin":"11:17","shichiken":"11:19","ryokui":"11:21","hiroshima":"11:44"},{"no":"780M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"11:23","uwayagi":"11:34","bairin":"11:37","shichiken":"11:39","ryokui":"11:41","hiroshima":"12:04"},{"no":"2782M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"12:01","hiroshima":"12:24"},{"no":"784M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"12:03","uwayagi":"12:14","bairin":"12:17","shichiken":"12:19","ryokui":"12:21","hiroshima":"12:44"},{"no":"786M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"12:23","uwayagi":"12:34","bairin":"12:37","shichiken":"12:39","ryokui":"12:41","hiroshima":"13:04"},{"no":"2788M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"13:01","hiroshima":"13:24"},{"no":"790M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"13:03","uwayagi":"13:14","bairin":"13:17","shichiken":"13:19","ryokui":"13:21","hiroshima":"13:44"},{"no":"792M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"13:23","uwayagi":"13:34","bairin":"13:37","shichiken":"13:39","ryokui":"13:41","hiroshima":"14:04"},{"no":"2794M","weekday_only":false,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"14:01","hiroshima":"14:24"},{"no":"796M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"14:03","uwayagi":"14:14","bairin":"14:17","shichiken":"14:19","ryokui":"14:21","hiroshima":"14:44"},{"no":"798M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"14:23","uwayagi":"14:34","bairin":"14:37","shichiken":"14:39","ryokui":"14:41","hiroshima":"15:12"},{"no":"2800M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"15:01","hiroshima":"15:24"},{"no":"802M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"15:03","uwayagi":"15:14","bairin":"15:17","shichiken":"15:19","ryokui":"15:21","hiroshima":"15:44"},{"no":"804M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"15:23","uwayagi":"15:34","bairin":"15:37","shichiken":"15:39","ryokui":"15:41","hiroshima":"16:07"},{"no":"2806M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"16:01","hiroshima":"16:25"},{"no":"808M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:03","uwayagi":"16:14","bairin":"16:17","shichiken":"16:19","ryokui":"16:26","hiroshima":"16:53"},{"no":"2810M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"16:40","hiroshima":"17:08"},{"no":"812M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:23","uwayagi":"16:40","bairin":"16:46","shichiken":"16:49","ryokui":"16:51","hiroshima":"17:21"},{"no":"2814M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:03","hiroshima":"17:32"},{"no":"816M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"16:50","uwayagi":"17:05","bairin":"17:10","shichiken":"17:13","ryokui":"17:15","hiroshima":"17:41"},{"no":"2818M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:28","hiroshima":"17:57"},{"no":"820M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"17:14","uwayagi":"17:28","bairin":"17:35","shichiken":"17:38","ryokui":"17:40","hiroshima":"18:09"},{"no":"2822M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"17:52","hiroshima":"18:22"},{"no":"824M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"17:37","uwayagi":"17:50","bairin":"17:57","shichiken":"18:00","ryokui":"18:03","hiroshima":"18:29"},{"no":"2826M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"18:17","hiroshima":"18:45"},{"no":"828M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:10","uwayagi":"18:19","bairin":"18:22","shichiken":"18:25","ryokui":"18:27","hiroshima":"18:58"},{"no":"2830M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"18:40","hiroshima":"19:07"},{"no":"832M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:29","uwayagi":"18:43","bairin":"18:46","shichiken":"18:49","ryokui":"18:51","hiroshima":"19:19"},{"no":"2834M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:04","hiroshima":"19:30"},{"no":"836M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"18:51","uwayagi":"19:07","bairin":"19:10","shichiken":"19:13","ryokui":"19:16","hiroshima":"19:43"},{"no":"2838M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:26","hiroshima":"19:53"},{"no":"840M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:15","uwayagi":"19:25","bairin":"19:32","shichiken":"19:35","ryokui":"19:37","hiroshima":"20:00"},{"no":"2842M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"19:50","hiroshima":"20:14"},{"no":"844M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:36","uwayagi":"19:49","bairin":"19:56","shichiken":"19:59","ryokui":"20:02","hiroshima":"20:32"},{"no":"2846M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"20:18","hiroshima":"20:44"},{"no":"848M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"19:59","uwayagi":"20:14","bairin":"20:21","shichiken":"20:23","ryokui":"20:28","hiroshima":"20:53"},{"no":"2850M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"20:40","hiroshima":"21:07"},{"no":"852M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"20:23","uwayagi":"20:37","bairin":"20:44","shichiken":"20:46","ryokui":"20:50","hiroshima":"21:19"},{"no":"2854M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"21:11","hiroshima":"21:37"},{"no":"856M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"21:00","uwayagi":"21:09","bairin":"21:19","shichiken":"21:21","ryokui":"21:24","hiroshima":"21:44"},{"no":"2858M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"21:41","hiroshima":"22:05"},{"no":"860M","weekday_only":true,"through":false,"origin":"あき亀山","akikame":"21:33","uwayagi":"21:42","bairin":"21:46","shichiken":"21:48","ryokui":"21:53","hiroshima":"22:17"},{"no":"2862M","weekday_only":true,"through":false,"origin":"緑井","akikame":null,"uwayagi":null,"bairin":null,"shichiken":null,"ryokui":"22:12","hiroshima":"22:32"},{"no":"864M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"22:04","uwayagi":"22:14","bairin":"22:19","shichiken":"22:21","ryokui":"22:23","hiroshima":"22:44"},{"no":"866M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"22:42","uwayagi":"22:52","bairin":"22:55","shichiken":"22:57","ryokui":"23:00","hiroshima":"23:20"},{"no":"868M","weekday_only":false,"through":false,"origin":"あき亀山","akikame":"23:10","uwayagi":"23:20","bairin":"23:23","shichiken":"23:25","ryokui":"23:27","hiroshima":"23:48"}]};
-  render();
+  const initialTab = new Date().getHours() < 12 ? 'iki' : 'kaeri';
+  switchTab(initialTab);
   fetchDelay();
 }
 
