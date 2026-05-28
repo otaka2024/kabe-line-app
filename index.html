@@ -248,6 +248,20 @@ button, .tab, .board-btn { touch-action: manipulation; }
 .t-cd.cd-red  { color: #c0392b !important; }
 .t-badge { min-width: 74px; text-align: right; flex-shrink: 0; }
 
+/* ── 2-row layout for named-destination cards ── */
+.train-card.has-badge {
+  flex-direction: column; align-items: stretch;
+  justify-content: center; gap: 2px;
+  padding: 7px 14px 7px 18px;
+}
+.train-card.has-badge .t-top {
+  display: flex; align-items: center; gap: 8px;
+}
+.train-card.has-badge .t-top .t-cd { flex: 1; }
+.train-card.has-badge .t-bottom {
+  display: flex; justify-content: flex-end;
+}
+
 /* ── Badges ── */
 .badge {
   display: inline-block;
@@ -304,6 +318,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
   .t-dep, .t-arr { font-size: 26px; }
   .t-cd { font-size: 22px; }
   .train-card { height: 82px; padding: 0 10px 0 16px; }
+  .train-card.has-badge { height: 82px; padding: 6px 10px 6px 16px; }
   .tab { padding: 11px 0; font-size: 0.95rem; }
   .badge { font-size: 0.63rem; padding: 2px 6px; }
   .t-badge { min-width: 64px; }
@@ -368,7 +383,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.4';
+const APP_VER = '2.0.5';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -490,13 +505,18 @@ function trainCard(t, now) {
     badge = '<span class="badge bg-ryokui">緑井始発</span>';
   }
 
-  const cls = ['train-card', cardCls, isPast ? 'past' : '', isImminent ? 'imminent' : '']
+  const cls = ['train-card', cardCls, badge ? 'has-badge' : '', isPast ? 'past' : '', isImminent ? 'imminent' : '']
     .filter(Boolean).join(' ');
 
+  if (badge) {
+    return `<div class="${cls}">
+  <div class="t-top"><div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${t.arr || '—'}</span></div>${cdHtml(t.depMin, normalColor)}</div>
+  <div class="t-bottom"><div class="t-badge">${badge}</div></div>
+</div>`;
+  }
   return `<div class="${cls}">
   <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${t.arr || '—'}</span></div>
   ${cdHtml(t.depMin, normalColor)}
-  <div class="t-badge">${badge}</div>
 </div>`;
 }
 
@@ -515,13 +535,18 @@ function kaeriCard(t, now) {
     arrTime = t.shichiken;
   }
 
-  const cls = ['train-card', cardCls, isPast ? 'past' : '', isImminent ? 'imminent' : '']
+  const cls = ['train-card', cardCls, badge ? 'has-badge' : '', isPast ? 'past' : '', isImminent ? 'imminent' : '']
     .filter(Boolean).join(' ');
 
+  if (badge) {
+    return `<div class="${cls}">
+  <div class="t-top"><div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${arrTime || '—'}</span></div>${cdHtml(t.depMin, normalColor)}</div>
+  <div class="t-bottom"><div class="t-badge">${badge}</div></div>
+</div>`;
+  }
   return `<div class="${cls}">
   <div class="t-times"><span class="t-dep">${t.dep}</span><span class="t-arrow">→</span><span class="t-arr">${arrTime || '—'}</span></div>
   ${cdHtml(t.depMin, normalColor)}
-  <div class="t-badge">${badge}</div>
 </div>`;
 }
 
