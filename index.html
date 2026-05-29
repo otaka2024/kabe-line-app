@@ -383,7 +383,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.6';
+const APP_VER = '2.0.7';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -452,14 +452,22 @@ function isWeekday() {
 }
 
 // ── Countdown HTML ──
+function cdText(diffSec) {
+  if (diffSec >= 3600) {
+    const h = Math.floor(diffSec / 3600);
+    const m = Math.floor((diffSec % 3600) / 60);
+    return m > 0 ? `${h}時間${m}分` : `${h}時間`;
+  }
+  const mins = Math.floor(diffSec / 60);
+  const secs = diffSec % 60;
+  return mins > 0 ? `${mins}分${String(secs).padStart(2,'0')}秒` : `${secs}秒`;
+}
 function cdHtml(depMin, normalColor) {
   const diffSec = depMin * 60 - nowSeconds();
   const attr = `data-dep="${depMin}" data-color="${normalColor}"`;
   if (diffSec < -180) return `<span class="t-cd cd-past" ${attr}>出発済</span>`;
   if (diffSec <= 0)   return `<span class="t-cd cd-red" ${attr}>まもなく発車</span>`;
-  const mins = Math.floor(diffSec / 60);
-  const secs = diffSec % 60;
-  const str = mins > 0 ? `${mins}分${String(secs).padStart(2,'0')}秒` : `${secs}秒`;
+  const str = cdText(diffSec);
   if (diffSec <= 600) return `<span class="t-cd cd-red" ${attr}>あと${str}</span>`;
   return `<span class="t-cd" style="color:${normalColor}" ${attr}>あと${str}</span>`;
 }
@@ -475,9 +483,7 @@ function updateCountdowns() {
     if (diffSec < -180) { cls = 't-cd cd-past'; text = '出発済'; }
     else if (diffSec <= 0) { cls = 't-cd cd-red'; text = 'まもなく発車'; }
     else {
-      const mins = Math.floor(diffSec / 60);
-      const secs = diffSec % 60;
-      const str = mins > 0 ? `${mins}分${String(secs).padStart(2,'0')}秒` : `${secs}秒`;
+      const str = cdText(diffSec);
       if (diffSec <= 600) { cls = 't-cd cd-red'; text = `あと${str}`; }
       else { cls = 't-cd'; style = `color:${normalColor}`; text = `あと${str}`; }
     }
