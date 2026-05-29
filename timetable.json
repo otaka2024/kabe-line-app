@@ -1,9 +1,10 @@
 {
-  "generated": "2026-05-25",
+  "generated": "2026-05-30",
   "down": [
     {
       "no": "2731M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "05:40",
@@ -16,6 +17,20 @@
     {
       "no": "733M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "05:55",
+      "ryokui": "06:20",
+      "shichiken": "06:21",
+      "bairin": "06:24",
+      "uwayagi": "06:27",
+      "akikame": "06:41"
+    },
+    {
+      "no": "733M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "05:55",
@@ -28,6 +43,7 @@
     {
       "no": "2735M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "06:04",
@@ -40,6 +56,7 @@
     {
       "no": "737M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "06:14",
@@ -50,8 +67,22 @@
       "akikame": "07:01"
     },
     {
+      "no": "737M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "06:15",
+      "ryokui": "06:40",
+      "shichiken": "06:41",
+      "bairin": "06:46",
+      "uwayagi": "06:49",
+      "akikame": "07:01"
+    },
+    {
       "no": "2739M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "梅林",
       "hiroshima": "06:18",
@@ -64,6 +95,20 @@
     {
       "no": "741M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "06:35",
+      "ryokui": "07:00",
+      "shichiken": "07:02",
+      "bairin": "07:07",
+      "uwayagi": "07:10",
+      "akikame": "07:24"
+    },
+    {
+      "no": "741M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "06:35",
@@ -76,6 +121,20 @@
     {
       "no": "2743M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "梅林",
+      "hiroshima": "06:43",
+      "ryokui": "07:11",
+      "shichiken": "07:13",
+      "bairin": "07:15",
+      "uwayagi": null,
+      "akikame": null
+    },
+    {
+      "no": "2743M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "梅林",
       "hiroshima": "06:43",
@@ -88,6 +147,20 @@
     {
       "no": "745M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "06:54",
+      "ryokui": "07:24",
+      "shichiken": "07:25",
+      "bairin": "07:31",
+      "uwayagi": "07:34",
+      "akikame": "07:48"
+    },
+    {
+      "no": "745M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "06:54",
@@ -100,6 +173,7 @@
     {
       "no": "2747M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "梅林",
       "hiroshima": "07:09",
@@ -112,6 +186,7 @@
     {
       "no": "749M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "07:18",
@@ -122,8 +197,22 @@
       "akikame": "08:10"
     },
     {
+      "no": "749M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "07:19",
+      "ryokui": "07:48",
+      "shichiken": "07:50",
+      "bairin": "07:54",
+      "uwayagi": "07:58",
+      "akikame": "08:10"
+    },
+    {
       "no": "2751M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "07:31",
@@ -136,6 +225,7 @@
     {
       "no": "753M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "07:41",
@@ -146,8 +236,22 @@
       "akikame": "08:32"
     },
     {
+      "no": "753M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "07:43",
+      "ryokui": "08:10",
+      "shichiken": "08:12",
+      "bairin": "08:16",
+      "uwayagi": "08:20",
+      "akikame": "08:32"
+    },
+    {
       "no": "2755M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "07:55",
@@ -159,7 +263,21 @@
     },
     {
       "no": "757M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "08:01",
+      "ryokui": "08:31",
+      "shichiken": "08:33",
+      "bairin": "08:38",
+      "uwayagi": "08:41",
+      "akikame": "08:52"
+    },
+    {
+      "no": "757M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "08:02",
@@ -172,6 +290,7 @@
     {
       "no": "2759M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "08:10",
@@ -184,6 +303,7 @@
     {
       "no": "761M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "08:17",
@@ -194,8 +314,22 @@
       "akikame": "09:12"
     },
     {
+      "no": "761M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "08:20",
+      "ryokui": "08:51",
+      "shichiken": "08:53",
+      "bairin": "08:58",
+      "uwayagi": "09:01",
+      "akikame": "09:12"
+    },
+    {
       "no": "763M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "08:41",
@@ -208,6 +342,20 @@
     {
       "no": "765M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "09:03",
+      "ryokui": "09:31",
+      "shichiken": "09:32",
+      "bairin": "09:37",
+      "uwayagi": "09:40",
+      "akikame": "09:52"
+    },
+    {
+      "no": "765M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "09:03",
@@ -220,6 +368,7 @@
     {
       "no": "2767M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "09:26",
@@ -230,8 +379,22 @@
       "akikame": null
     },
     {
+      "no": "2767M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "緑井",
+      "hiroshima": "09:27",
+      "ryokui": "09:50",
+      "shichiken": null,
+      "bairin": null,
+      "uwayagi": null,
+      "akikame": null
+    },
+    {
       "no": "769M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "09:48",
@@ -244,6 +407,7 @@
     {
       "no": "771M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "10:08",
@@ -256,6 +420,7 @@
     {
       "no": "2773M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "10:27",
@@ -268,6 +433,7 @@
     {
       "no": "775M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "10:48",
@@ -280,6 +446,7 @@
     {
       "no": "777M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "11:08",
@@ -292,6 +459,7 @@
     {
       "no": "2779M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "11:27",
@@ -304,6 +472,20 @@
     {
       "no": "781M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "11:48",
+      "ryokui": "12:11",
+      "shichiken": "12:12",
+      "bairin": "12:17",
+      "uwayagi": "12:20",
+      "akikame": "12:32"
+    },
+    {
+      "no": "781M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "11:48",
@@ -316,6 +498,7 @@
     {
       "no": "783M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "12:08",
@@ -328,6 +511,7 @@
     {
       "no": "2785M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "12:24",
@@ -340,6 +524,7 @@
     {
       "no": "787M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "12:48",
@@ -352,6 +537,7 @@
     {
       "no": "789M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "13:08",
@@ -364,6 +550,7 @@
     {
       "no": "2791M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "13:27",
@@ -376,6 +563,20 @@
     {
       "no": "793M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "13:48",
+      "ryokui": "14:11",
+      "shichiken": "14:12",
+      "bairin": "14:17",
+      "uwayagi": "14:20",
+      "akikame": "14:32"
+    },
+    {
+      "no": "793M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "13:48",
@@ -388,6 +589,7 @@
     {
       "no": "795M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "14:08",
@@ -400,6 +602,7 @@
     {
       "no": "2797M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "14:27",
@@ -412,6 +615,7 @@
     {
       "no": "799M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "14:48",
@@ -424,6 +628,7 @@
     {
       "no": "801M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "15:06",
@@ -434,8 +639,22 @@
       "akikame": "15:52"
     },
     {
+      "no": "801M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "15:08",
+      "ryokui": "15:31",
+      "shichiken": "15:32",
+      "bairin": "15:37",
+      "uwayagi": "15:40",
+      "akikame": "15:52"
+    },
+    {
       "no": "2803M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "15:27",
@@ -448,6 +667,7 @@
     {
       "no": "805M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "15:48",
@@ -458,8 +678,22 @@
       "akikame": "16:32"
     },
     {
+      "no": "805M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "15:48",
+      "ryokui": "16:10",
+      "shichiken": "16:12",
+      "bairin": "16:17",
+      "uwayagi": "16:20",
+      "akikame": "16:32"
+    },
+    {
       "no": "2807M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "16:03",
@@ -470,8 +704,22 @@
       "akikame": null
     },
     {
+      "no": "807M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "16:08",
+      "ryokui": "16:30",
+      "shichiken": "16:32",
+      "bairin": "16:37",
+      "uwayagi": "16:40",
+      "akikame": "16:52"
+    },
+    {
       "no": "809M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "16:12",
@@ -484,6 +732,7 @@
     {
       "no": "2811M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "16:25",
@@ -494,8 +743,22 @@
       "akikame": null
     },
     {
+      "no": "809M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "16:27",
+      "ryokui": "16:50",
+      "shichiken": "16:52",
+      "bairin": "16:57",
+      "uwayagi": "17:00",
+      "akikame": "17:12"
+    },
+    {
       "no": "813M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "16:34",
@@ -506,8 +769,22 @@
       "akikame": "17:23"
     },
     {
+      "no": "813M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "16:48",
+      "ryokui": "17:10",
+      "shichiken": "17:12",
+      "bairin": "17:17",
+      "uwayagi": "17:20",
+      "akikame": "17:32"
+    },
+    {
       "no": "2815M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "16:49",
@@ -520,6 +797,7 @@
     {
       "no": "817M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "16:57",
@@ -530,8 +808,22 @@
       "akikame": "17:46"
     },
     {
+      "no": "819M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "17:09",
+      "ryokui": "17:32",
+      "shichiken": "17:34",
+      "bairin": "17:38",
+      "uwayagi": "17:41",
+      "akikame": "17:52"
+    },
+    {
       "no": "2819M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "17:12",
@@ -544,6 +836,7 @@
     {
       "no": "821M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "17:26",
@@ -554,8 +847,22 @@
       "akikame": "18:09"
     },
     {
+      "no": "821M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "17:27",
+      "ryokui": "17:51",
+      "shichiken": "17:53",
+      "bairin": "17:57",
+      "uwayagi": "18:01",
+      "akikame": "18:12"
+    },
+    {
       "no": "2823M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "17:35",
@@ -567,7 +874,21 @@
     },
     {
       "no": "825M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "17:48",
+      "ryokui": "18:11",
+      "shichiken": "18:13",
+      "bairin": "18:17",
+      "uwayagi": "18:21",
+      "akikame": "18:32"
+    },
+    {
+      "no": "825M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "17:49",
@@ -580,6 +901,7 @@
     {
       "no": "2827M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "18:03",
@@ -591,7 +913,21 @@
     },
     {
       "no": "829M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "18:08",
+      "ryokui": "18:31",
+      "shichiken": "18:32",
+      "bairin": "18:37",
+      "uwayagi": "18:40",
+      "akikame": "18:52"
+    },
+    {
+      "no": "829M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "18:12",
@@ -604,6 +940,7 @@
     {
       "no": "2831M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "18:25",
@@ -614,8 +951,22 @@
       "akikame": null
     },
     {
+      "no": "831M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "18:27",
+      "ryokui": "18:51",
+      "shichiken": "18:52",
+      "bairin": "18:57",
+      "uwayagi": "19:00",
+      "akikame": "19:12"
+    },
+    {
       "no": "833M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "18:35",
@@ -626,8 +977,22 @@
       "akikame": "19:25"
     },
     {
+      "no": "835M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "18:48",
+      "ryokui": "19:11",
+      "shichiken": "19:12",
+      "bairin": "19:17",
+      "uwayagi": "19:20",
+      "akikame": "19:32"
+    },
+    {
       "no": "2835M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "18:49",
@@ -640,6 +1005,7 @@
     {
       "no": "837M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "19:03",
@@ -650,8 +1016,22 @@
       "akikame": "19:45"
     },
     {
+      "no": "839M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "19:08",
+      "ryokui": "19:31",
+      "shichiken": "19:32",
+      "bairin": "19:37",
+      "uwayagi": "19:40",
+      "akikame": "19:52"
+    },
+    {
       "no": "2839M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "19:11",
@@ -664,6 +1044,7 @@
     {
       "no": "841M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "19:26",
@@ -674,8 +1055,22 @@
       "akikame": "20:08"
     },
     {
+      "no": "841M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "19:27",
+      "ryokui": "19:51",
+      "shichiken": "19:52",
+      "bairin": "19:57",
+      "uwayagi": "20:00",
+      "akikame": "20:12"
+    },
+    {
       "no": "2843M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "19:35",
@@ -688,6 +1083,20 @@
     {
       "no": "845M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "19:51",
+      "ryokui": "20:14",
+      "shichiken": "20:16",
+      "bairin": "20:19",
+      "uwayagi": "20:23",
+      "akikame": "20:33"
+    },
+    {
+      "no": "845M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "19:51",
@@ -700,6 +1109,7 @@
     {
       "no": "2847M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "20:05",
@@ -711,7 +1121,21 @@
     },
     {
       "no": "849M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "20:06",
+      "ryokui": "20:37",
+      "shichiken": "20:39",
+      "bairin": "20:43",
+      "uwayagi": "20:46",
+      "akikame": "20:56"
+    },
+    {
+      "no": "849M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "20:13",
@@ -724,6 +1148,7 @@
     {
       "no": "2851M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "20:26",
@@ -734,8 +1159,22 @@
       "akikame": null
     },
     {
+      "no": "2851M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "緑井",
+      "hiroshima": "20:26",
+      "ryokui": "20:49",
+      "shichiken": null,
+      "bairin": null,
+      "uwayagi": null,
+      "akikame": null
+    },
+    {
       "no": "853M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "20:47",
@@ -748,6 +1187,7 @@
     {
       "no": "2855M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "21:03",
@@ -760,6 +1200,7 @@
     {
       "no": "857M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "21:12",
@@ -770,8 +1211,22 @@
       "akikame": "21:59"
     },
     {
+      "no": "857M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "21:14",
+      "ryokui": "21:39",
+      "shichiken": "21:41",
+      "bairin": "21:46",
+      "uwayagi": "21:49",
+      "akikame": "21:59"
+    },
+    {
       "no": "2859M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "terminal": "緑井",
       "hiroshima": "21:27",
@@ -784,6 +1239,20 @@
     {
       "no": "861M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "21:48",
+      "ryokui": "22:09",
+      "shichiken": "22:11",
+      "bairin": "22:17",
+      "uwayagi": "22:20",
+      "akikame": "22:30"
+    },
+    {
+      "no": "861M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "21:48",
@@ -796,6 +1265,20 @@
     {
       "no": "863M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "22:09",
+      "ryokui": "22:33",
+      "shichiken": "22:35",
+      "bairin": "22:37",
+      "uwayagi": "22:41",
+      "akikame": "22:51"
+    },
+    {
+      "no": "863M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "22:09",
@@ -808,6 +1291,7 @@
     {
       "no": "865M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "22:37",
@@ -820,6 +1304,20 @@
     {
       "no": "867M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "terminal": "あき亀山",
+      "hiroshima": "23:14",
+      "ryokui": "23:37",
+      "shichiken": "23:38",
+      "bairin": "23:41",
+      "uwayagi": "23:44",
+      "akikame": "23:54"
+    },
+    {
+      "no": "867M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "23:14",
@@ -832,6 +1330,7 @@
     {
       "no": "869M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "terminal": "あき亀山",
       "hiroshima": "23:41",
@@ -846,6 +1345,7 @@
     {
       "no": "730M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "05:09",
@@ -858,6 +1358,7 @@
     {
       "no": "732M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "05:32",
@@ -868,20 +1369,22 @@
       "hiroshima": "06:14"
     },
     {
-      "no": "2734M",
-      "weekday_only": true,
+      "no": "732M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
-      "origin": "緑井",
-      "akikame": null,
-      "uwayagi": null,
-      "bairin": null,
-      "shichiken": null,
-      "ryokui": "06:07",
-      "hiroshima": "06:39"
+      "origin": "あき亀山",
+      "akikame": "05:32",
+      "uwayagi": "05:41",
+      "bairin": "05:44",
+      "shichiken": "05:47",
+      "ryokui": "05:49",
+      "hiroshima": "06:14"
     },
     {
       "no": "736M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "06:03",
@@ -892,20 +1395,35 @@
       "hiroshima": "06:47"
     },
     {
-      "no": "2738M",
+      "no": "736M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "06:03",
+      "uwayagi": "06:12",
+      "bairin": "06:15",
+      "shichiken": "06:17",
+      "ryokui": "06:25",
+      "hiroshima": "06:47"
+    },
+    {
+      "no": "2734M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "06:38",
-      "hiroshima": "07:06"
+      "ryokui": "06:07",
+      "hiroshima": "06:39"
     },
     {
       "no": "740M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "06:29",
@@ -916,20 +1434,35 @@
       "hiroshima": "07:15"
     },
     {
-      "no": "2742M",
-      "weekday_only": true,
+      "no": "740M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
-      "origin": "梅林",
+      "origin": "あき亀山",
+      "akikame": "06:32",
+      "uwayagi": "06:42",
+      "bairin": "06:46",
+      "shichiken": "06:48",
+      "ryokui": "06:51",
+      "hiroshima": "07:15"
+    },
+    {
+      "no": "2738M",
+      "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
-      "bairin": "06:55",
-      "shichiken": "06:58",
-      "ryokui": "07:01",
-      "hiroshima": "07:27"
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "06:38",
+      "hiroshima": "07:06"
     },
     {
       "no": "744M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "06:52",
@@ -940,20 +1473,22 @@
       "hiroshima": "07:38"
     },
     {
-      "no": "2746M",
+      "no": "2742M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "梅林",
       "akikame": null,
       "uwayagi": null,
-      "bairin": "07:19",
-      "shichiken": "07:22",
-      "ryokui": "07:24",
-      "hiroshima": "07:51"
+      "bairin": "06:55",
+      "shichiken": "06:58",
+      "ryokui": "07:01",
+      "hiroshima": "07:27"
     },
     {
       "no": "748M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "07:15",
@@ -964,20 +1499,48 @@
       "hiroshima": "07:59"
     },
     {
-      "no": "2750M",
+      "no": "748M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "07:15",
+      "uwayagi": "07:27",
+      "bairin": "07:30",
+      "shichiken": "07:33",
+      "ryokui": "07:35",
+      "hiroshima": "08:01"
+    },
+    {
+      "no": "2746M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "梅林",
       "akikame": null,
       "uwayagi": null,
-      "bairin": "07:43",
-      "shichiken": "07:46",
-      "ryokui": "07:48",
-      "hiroshima": "08:14"
+      "bairin": "07:19",
+      "shichiken": "07:22",
+      "ryokui": "07:24",
+      "hiroshima": "07:51"
+    },
+    {
+      "no": "2746M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "梅林",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": "07:19",
+      "shichiken": "07:22",
+      "ryokui": "07:24",
+      "hiroshima": "07:50"
     },
     {
       "no": "752M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "07:39",
@@ -988,20 +1551,48 @@
       "hiroshima": "08:26"
     },
     {
-      "no": "2754M",
-      "weekday_only": true,
+      "no": "752M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
-      "origin": "緑井",
+      "origin": "あき亀山",
+      "akikame": "07:39",
+      "uwayagi": "07:51",
+      "bairin": "07:55",
+      "shichiken": "07:58",
+      "ryokui": "08:00",
+      "hiroshima": "08:25"
+    },
+    {
+      "no": "2750M",
+      "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "梅林",
       "akikame": null,
       "uwayagi": null,
-      "bairin": null,
-      "shichiken": null,
-      "ryokui": "08:12",
-      "hiroshima": "08:37"
+      "bairin": "07:43",
+      "shichiken": "07:46",
+      "ryokui": "07:48",
+      "hiroshima": "08:14"
+    },
+    {
+      "no": "2750M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "梅林",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": "07:43",
+      "shichiken": "07:46",
+      "ryokui": "07:48",
+      "hiroshima": "08:14"
     },
     {
       "no": "756M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "08:01",
@@ -1012,20 +1603,35 @@
       "hiroshima": "08:50"
     },
     {
-      "no": "2758M",
+      "no": "756M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "08:01",
+      "uwayagi": "08:13",
+      "bairin": "08:16",
+      "shichiken": "08:19",
+      "ryokui": "08:21",
+      "hiroshima": "08:50"
+    },
+    {
+      "no": "2754M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "08:32",
-      "hiroshima": "08:58"
+      "ryokui": "08:12",
+      "hiroshima": "08:37"
     },
     {
       "no": "760M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "08:23",
@@ -1036,20 +1642,35 @@
       "hiroshima": "09:10"
     },
     {
-      "no": "2762M",
+      "no": "760M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "08:23",
+      "uwayagi": "08:34",
+      "bairin": "08:37",
+      "shichiken": "08:39",
+      "ryokui": "08:42",
+      "hiroshima": "09:11"
+    },
+    {
+      "no": "2758M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "08:53",
-      "hiroshima": "09:19"
+      "ryokui": "08:32",
+      "hiroshima": "08:58"
     },
     {
       "no": "764M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "08:43",
@@ -1060,8 +1681,48 @@
       "hiroshima": "09:33"
     },
     {
+      "no": "764M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "08:43",
+      "uwayagi": "08:54",
+      "bairin": "08:57",
+      "shichiken": "09:00",
+      "ryokui": "09:02",
+      "hiroshima": "09:24"
+    },
+    {
+      "no": "2762M",
+      "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "緑井",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "08:53",
+      "hiroshima": "09:19"
+    },
+    {
       "no": "766M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "09:03",
+      "uwayagi": "09:14",
+      "bairin": "09:17",
+      "shichiken": "09:19",
+      "ryokui": "09:21",
+      "hiroshima": "09:44"
+    },
+    {
+      "no": "766M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "09:03",
@@ -1074,6 +1735,7 @@
     {
       "no": "768M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "09:23",
@@ -1086,6 +1748,7 @@
     {
       "no": "2770M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1098,6 +1761,20 @@
     {
       "no": "772M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "10:03",
+      "uwayagi": "10:14",
+      "bairin": "10:17",
+      "shichiken": "10:19",
+      "ryokui": "10:21",
+      "hiroshima": "10:44"
+    },
+    {
+      "no": "772M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "10:03",
@@ -1110,6 +1787,7 @@
     {
       "no": "774M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "10:23",
@@ -1122,6 +1800,7 @@
     {
       "no": "2776M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1134,6 +1813,7 @@
     {
       "no": "778M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "11:03",
@@ -1144,8 +1824,22 @@
       "hiroshima": "11:44"
     },
     {
+      "no": "778M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "11:03",
+      "uwayagi": "11:14",
+      "bairin": "11:17",
+      "shichiken": "11:19",
+      "ryokui": "11:21",
+      "hiroshima": "11:45"
+    },
+    {
       "no": "780M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "11:23",
@@ -1158,6 +1852,7 @@
     {
       "no": "2782M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1170,6 +1865,7 @@
     {
       "no": "784M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "12:03",
@@ -1182,6 +1878,7 @@
     {
       "no": "786M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "12:23",
@@ -1194,6 +1891,7 @@
     {
       "no": "2788M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1206,6 +1904,20 @@
     {
       "no": "790M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "13:03",
+      "uwayagi": "13:14",
+      "bairin": "13:17",
+      "shichiken": "13:19",
+      "ryokui": "13:21",
+      "hiroshima": "13:44"
+    },
+    {
+      "no": "790M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "13:03",
@@ -1218,6 +1930,7 @@
     {
       "no": "792M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "13:23",
@@ -1230,6 +1943,7 @@
     {
       "no": "2794M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1242,6 +1956,20 @@
     {
       "no": "796M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "14:03",
+      "uwayagi": "14:14",
+      "bairin": "14:17",
+      "shichiken": "14:19",
+      "ryokui": "14:21",
+      "hiroshima": "14:44"
+    },
+    {
+      "no": "796M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "14:03",
@@ -1254,6 +1982,7 @@
     {
       "no": "798M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "14:23",
@@ -1264,8 +1993,35 @@
       "hiroshima": "15:12"
     },
     {
+      "no": "798M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "14:23",
+      "uwayagi": "14:34",
+      "bairin": "14:37",
+      "shichiken": "14:39",
+      "ryokui": "14:41",
+      "hiroshima": "15:04"
+    },
+    {
       "no": "2800M",
       "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "緑井",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "15:01",
+      "hiroshima": "15:24"
+    },
+    {
+      "no": "2800M",
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1278,6 +2034,7 @@
     {
       "no": "802M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "15:03",
@@ -1290,6 +2047,7 @@
     {
       "no": "804M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "15:23",
@@ -1300,8 +2058,22 @@
       "hiroshima": "16:07"
     },
     {
+      "no": "804M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "15:23",
+      "uwayagi": "15:34",
+      "bairin": "15:37",
+      "shichiken": "15:39",
+      "ryokui": "15:41",
+      "hiroshima": "16:04"
+    },
+    {
       "no": "2806M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1312,8 +2084,22 @@
       "hiroshima": "16:25"
     },
     {
+      "no": "2806M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "緑井",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "16:01",
+      "hiroshima": "16:24"
+    },
+    {
       "no": "808M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "16:03",
@@ -1324,8 +2110,48 @@
       "hiroshima": "16:53"
     },
     {
+      "no": "808M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "16:03",
+      "uwayagi": "16:13",
+      "bairin": "16:16",
+      "shichiken": "16:19",
+      "ryokui": "16:21",
+      "hiroshima": "16:44"
+    },
+    {
+      "no": "812M",
+      "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "16:23",
+      "uwayagi": "16:40",
+      "bairin": "16:46",
+      "shichiken": "16:49",
+      "ryokui": "16:51",
+      "hiroshima": "17:21"
+    },
+    {
+      "no": "810M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "16:23",
+      "uwayagi": "16:33",
+      "bairin": "16:36",
+      "shichiken": "16:39",
+      "ryokui": "16:41",
+      "hiroshima": "17:08"
+    },
+    {
       "no": "2810M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
@@ -1337,31 +2163,21 @@
     },
     {
       "no": "812M",
-      "weekday_only": true,
+      "weekday_only": false,
+      "day_type": "holiday",
       "through": false,
       "origin": "あき亀山",
-      "akikame": "16:23",
-      "uwayagi": "16:40",
-      "bairin": "16:46",
-      "shichiken": "16:49",
-      "ryokui": "16:51",
-      "hiroshima": "17:21"
-    },
-    {
-      "no": "2814M",
-      "weekday_only": true,
-      "through": false,
-      "origin": "緑井",
-      "akikame": null,
-      "uwayagi": null,
-      "bairin": null,
-      "shichiken": null,
-      "ryokui": "17:03",
-      "hiroshima": "17:32"
+      "akikame": "16:43",
+      "uwayagi": "16:53",
+      "bairin": "16:56",
+      "shichiken": "16:59",
+      "ryokui": "17:01",
+      "hiroshima": "17:23"
     },
     {
       "no": "816M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "16:50",
@@ -1372,20 +2188,35 @@
       "hiroshima": "17:41"
     },
     {
-      "no": "2818M",
+      "no": "2814M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "17:28",
-      "hiroshima": "17:57"
+      "ryokui": "17:03",
+      "hiroshima": "17:32"
+    },
+    {
+      "no": "820M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "17:03",
+      "uwayagi": "17:14",
+      "bairin": "17:17",
+      "shichiken": "17:19",
+      "ryokui": "17:21",
+      "hiroshima": "17:45"
     },
     {
       "no": "820M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "17:14",
@@ -1396,20 +2227,35 @@
       "hiroshima": "18:09"
     },
     {
-      "no": "2822M",
+      "no": "824M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "17:22",
+      "uwayagi": "17:32",
+      "bairin": "17:37",
+      "shichiken": "17:40",
+      "ryokui": "17:42",
+      "hiroshima": "18:05"
+    },
+    {
+      "no": "2818M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "17:52",
-      "hiroshima": "18:22"
+      "ryokui": "17:28",
+      "hiroshima": "17:57"
     },
     {
       "no": "824M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "17:37",
@@ -1420,20 +2266,48 @@
       "hiroshima": "18:29"
     },
     {
-      "no": "2826M",
+      "no": "828M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "17:43",
+      "uwayagi": "17:54",
+      "bairin": "17:57",
+      "shichiken": "18:00",
+      "ryokui": "18:02",
+      "hiroshima": "18:25"
+    },
+    {
+      "no": "2822M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "18:17",
+      "ryokui": "17:52",
+      "hiroshima": "18:22"
+    },
+    {
+      "no": "830M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "18:03",
+      "uwayagi": "18:14",
+      "bairin": "18:17",
+      "shichiken": "18:19",
+      "ryokui": "18:21",
       "hiroshima": "18:45"
     },
     {
       "no": "828M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "18:10",
@@ -1444,20 +2318,35 @@
       "hiroshima": "18:58"
     },
     {
-      "no": "2830M",
+      "no": "2826M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "18:40",
-      "hiroshima": "19:07"
+      "ryokui": "18:17",
+      "hiroshima": "18:45"
+    },
+    {
+      "no": "832M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "18:23",
+      "uwayagi": "18:34",
+      "bairin": "18:37",
+      "shichiken": "18:39",
+      "ryokui": "18:41",
+      "hiroshima": "19:05"
     },
     {
       "no": "832M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "18:29",
@@ -1468,20 +2357,35 @@
       "hiroshima": "19:19"
     },
     {
-      "no": "2834M",
+      "no": "2830M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "19:04",
-      "hiroshima": "19:30"
+      "ryokui": "18:40",
+      "hiroshima": "19:07"
+    },
+    {
+      "no": "834M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "18:43",
+      "uwayagi": "18:54",
+      "bairin": "18:57",
+      "shichiken": "18:59",
+      "ryokui": "19:01",
+      "hiroshima": "19:25"
     },
     {
       "no": "836M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "18:51",
@@ -1492,20 +2396,35 @@
       "hiroshima": "19:43"
     },
     {
-      "no": "2838M",
+      "no": "836M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "19:03",
+      "uwayagi": "19:14",
+      "bairin": "19:17",
+      "shichiken": "19:19",
+      "ryokui": "19:21",
+      "hiroshima": "19:45"
+    },
+    {
+      "no": "2834M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "19:26",
-      "hiroshima": "19:53"
+      "ryokui": "19:04",
+      "hiroshima": "19:30"
     },
     {
       "no": "840M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "19:15",
@@ -1516,20 +2435,35 @@
       "hiroshima": "20:00"
     },
     {
-      "no": "2842M",
+      "no": "840M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "19:23",
+      "uwayagi": "19:34",
+      "bairin": "19:37",
+      "shichiken": "19:39",
+      "ryokui": "19:41",
+      "hiroshima": "20:13"
+    },
+    {
+      "no": "2838M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "19:50",
-      "hiroshima": "20:14"
+      "ryokui": "19:26",
+      "hiroshima": "19:53"
     },
     {
       "no": "844M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "19:36",
@@ -1540,20 +2474,35 @@
       "hiroshima": "20:32"
     },
     {
-      "no": "2846M",
+      "no": "844M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "19:43",
+      "uwayagi": "19:54",
+      "bairin": "19:57",
+      "shichiken": "19:59",
+      "ryokui": "20:01",
+      "hiroshima": "20:32"
+    },
+    {
+      "no": "2842M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "20:18",
-      "hiroshima": "20:44"
+      "ryokui": "19:50",
+      "hiroshima": "20:14"
     },
     {
       "no": "848M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "19:59",
@@ -1564,20 +2513,35 @@
       "hiroshima": "20:53"
     },
     {
-      "no": "2850M",
+      "no": "848M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "20:03",
+      "uwayagi": "20:14",
+      "bairin": "20:21",
+      "shichiken": "20:23",
+      "ryokui": "20:28",
+      "hiroshima": "20:52"
+    },
+    {
+      "no": "2846M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "20:40",
-      "hiroshima": "21:07"
+      "ryokui": "20:18",
+      "hiroshima": "20:44"
     },
     {
       "no": "852M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "20:23",
@@ -1588,20 +2552,35 @@
       "hiroshima": "21:19"
     },
     {
-      "no": "2854M",
+      "no": "852M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "20:23",
+      "uwayagi": "20:37",
+      "bairin": "20:44",
+      "shichiken": "20:46",
+      "ryokui": "20:50",
+      "hiroshima": "21:11"
+    },
+    {
+      "no": "2850M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "21:11",
-      "hiroshima": "21:37"
+      "ryokui": "20:40",
+      "hiroshima": "21:07"
     },
     {
       "no": "856M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "21:00",
@@ -1612,20 +2591,48 @@
       "hiroshima": "21:44"
     },
     {
-      "no": "2858M",
+      "no": "856M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "21:00",
+      "uwayagi": "21:09",
+      "bairin": "21:19",
+      "shichiken": "21:21",
+      "ryokui": "21:24",
+      "hiroshima": "21:44"
+    },
+    {
+      "no": "2854M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "21:41",
-      "hiroshima": "22:05"
+      "ryokui": "21:11",
+      "hiroshima": "21:37"
+    },
+    {
+      "no": "2854M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "緑井",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "21:12",
+      "hiroshima": "21:37"
     },
     {
       "no": "860M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "あき亀山",
       "akikame": "21:33",
@@ -1636,20 +2643,35 @@
       "hiroshima": "22:17"
     },
     {
-      "no": "2862M",
+      "no": "860M",
+      "weekday_only": false,
+      "day_type": "holiday",
+      "through": false,
+      "origin": "あき亀山",
+      "akikame": "21:33",
+      "uwayagi": "21:42",
+      "bairin": "21:46",
+      "shichiken": "21:48",
+      "ryokui": "21:53",
+      "hiroshima": "22:17"
+    },
+    {
+      "no": "2858M",
       "weekday_only": true,
+      "day_type": "weekday",
       "through": false,
       "origin": "緑井",
       "akikame": null,
       "uwayagi": null,
       "bairin": null,
       "shichiken": null,
-      "ryokui": "22:12",
-      "hiroshima": "22:32"
+      "ryokui": "21:41",
+      "hiroshima": "22:05"
     },
     {
       "no": "864M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "22:04",
@@ -1660,8 +2682,22 @@
       "hiroshima": "22:44"
     },
     {
+      "no": "2862M",
+      "weekday_only": true,
+      "day_type": "weekday",
+      "through": false,
+      "origin": "緑井",
+      "akikame": null,
+      "uwayagi": null,
+      "bairin": null,
+      "shichiken": null,
+      "ryokui": "22:12",
+      "hiroshima": "22:32"
+    },
+    {
       "no": "866M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "22:42",
@@ -1674,6 +2710,7 @@
     {
       "no": "868M",
       "weekday_only": false,
+      "day_type": "all",
       "through": false,
       "origin": "あき亀山",
       "akikame": "23:10",
