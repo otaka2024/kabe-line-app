@@ -383,7 +383,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.8';
+const APP_VER = '2.0.9';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -446,9 +446,32 @@ function hhmm2min(s) {
   if (!s) return null;
   const [h, m] = s.split(':').map(Number); return h * 60 + m;
 }
+// 祝日は土休日ダイヤ。毎年12月頃に翌年分を追記すること（内閣府の祝日一覧を参照）
+const JP_HOLIDAYS = new Set([
+  // 2026年
+  '2026-01-01','2026-01-12','2026-02-11','2026-02-23','2026-03-20',
+  '2026-04-29','2026-05-03','2026-05-04','2026-05-05','2026-05-06',
+  '2026-07-20','2026-08-11','2026-09-21','2026-09-22','2026-09-23',
+  '2026-10-12','2026-11-03','2026-11-23',
+  // 2027年
+  '2027-01-01','2027-01-11','2027-02-11','2027-02-23','2027-03-21','2027-03-22',
+  '2027-04-29','2027-05-03','2027-05-04','2027-05-05',
+  '2027-07-19','2027-08-11','2027-09-20','2027-09-23',
+  '2027-10-11','2027-11-03','2027-11-23',
+]);
+function isHolidayToday(n) {
+  const y = n.getFullYear(), mo = n.getMonth() + 1, da = n.getDate();
+  // 年末年始（12/29〜1/3）はJR土休日ダイヤ
+  if ((mo === 12 && da >= 29) || (mo === 1 && da <= 3)) return true;
+  const key = `${y}-${String(mo).padStart(2,'0')}-${String(da).padStart(2,'0')}`;
+  return JP_HOLIDAYS.has(key);
+}
 function isWeekday() {
-  const d = debugDay !== null ? debugDay : new Date().getDay();
-  return d >= 1 && d <= 5;
+  if (debugDay !== null) return debugDay >= 1 && debugDay <= 5;
+  const n = new Date();
+  const d = n.getDay();
+  if (d === 0 || d === 6) return false;
+  return !isHolidayToday(n);
 }
 function runToday(t, isWd) {
   const dt = t.day_type;
@@ -713,10 +736,17 @@ function render(scroll = false) {
 
 // ── Delay info ──
 async function fetchDelay() {
+  // trafficinfo.westjr.co.jp は CORS 非対応なので allorigins.win 経由で取得
+  const TARGET = 'https://trafficinfo.westjr.co.jp/chugoku.html';
   try {
-    const r = await fetch('https://trafficinfo.westjr.co.jp/chugoku.html');
-    const text = await r.text();
-    document.getElementById('delay-banner').classList.toggle('show', text.includes('可部線'));
+    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(TARGET)}&timestamp=${Date.now()}`);
+    if (!r.ok) throw new Error('proxy error');
+    const json = await r.json();
+    const text = json.contents || '';
+    // 遅延・運転見合わせなど運行障害情報の中に「可部線」が含まれるかチェック
+    // 正常時は「情報はありません」のみでライン名は出ない
+    const hasDelay = text.includes('可部線');
+    document.getElementById('delay-banner').classList.toggle('show', hasDelay);
   } catch {
     document.getElementById('delay-banner').classList.remove('show');
   }
