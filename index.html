@@ -383,7 +383,7 @@ button, .tab, .board-btn { touch-action: manipulation; }
 <button id="back-to-now" onclick="backToNow()">現在に戻る</button>
 
 <script>
-const APP_VER = '2.0.9';
+const APP_VER = '2.0.10';
 
 // ── PWA ──
 let _deferredPrompt = null;
@@ -736,19 +736,28 @@ function render(scroll = false) {
 
 // ── Delay info ──
 async function fetchDelay() {
-  // trafficinfo.westjr.co.jp は CORS 非対応なので allorigins.win 経由で取得
-  const TARGET = 'https://trafficinfo.westjr.co.jp/chugoku.html';
+  // JR西日本 遅延証明書API（可部線: area_id=6, line_id=40）
+  // CORSヘッダー非対応のためallorigins.winで中継（JSONをそのまま取得）
+  const API = 'https://delay.trafficinfo.westjr.co.jp/api/fr/v1/today/ope/delay_certificate/delay_certificate_today.json';
+  const banner = document.getElementById('delay-banner');
   try {
-    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(TARGET)}&timestamp=${Date.now()}`);
-    if (!r.ok) throw new Error('proxy error');
-    const json = await r.json();
-    const text = json.contents || '';
-    // 遅延・運転見合わせなど運行障害情報の中に「可部線」が含まれるかチェック
-    // 正常時は「情報はありません」のみでライン名は出ない
-    const hasDelay = text.includes('可部線');
-    document.getElementById('delay-banner').classList.toggle('show', hasDelay);
+    const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(API));
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const proxy = await r.json();
+    const data = JSON.parse(proxy.contents);
+    const area = (data.areas || []).find(a => a.area_id === 6);
+    const line = area ? (area.lines || []).find(l => l.line_id === 40) : null;
+    const certs = line ? (line.delay_certificates || []) : [];
+    const delays = certs.filter(c => c.delay_certificate_item_type === 'DELAY_CERTIFICATE');
+    if (delays.length > 0) {
+      const times = [...new Set(delays.map(c => c.delay_certificate))].join('・');
+      banner.textContent = '⚠️ 可部線 遅延証明書あり（' + times + '）';
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
   } catch {
-    document.getElementById('delay-banner').classList.remove('show');
+    banner.classList.remove('show');
   }
 }
 function openTrafficInfo() {
